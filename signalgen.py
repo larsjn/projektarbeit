@@ -1,8 +1,9 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.widgets as wdgt
 
+
+// Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
     @abstractmethod
     def getYAt(self, x):
@@ -12,28 +13,11 @@ class signal(metaclass=ABCMeta):
         outList = [self.getYAt(x) for x in inList]
         return outList
 
+
 class sine(signal):
     def __init__(self, frequency = 1, amplitude = 1):
         self.frequency = frequency
         self.amplitude = amplitude
-
-        self.fig, ax = plt.subplots()
-        plt.subplots_adjust(bottom=0.25)
-        self.t = np.arange(0.0, 1.0, 0.001)
-        self.s = self.makeList(self.t)
-        self.l, = plt.plot(self.t, self.s, lw=1, color='red')
-
-        plt.axis([0, 1, -10, 10])
-        plt.grid()
-
-        axfreq = plt.axes([0.25, 0.1, 0.65, 0.03], axisbg='white')
-        axamp = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg='white')
-
-        self.sfreq = wdgt.Slider(axfreq, 'Freq', 0.1, 30.0, valinit=self.frequency)
-        self.samp = wdgt.Slider(axamp, 'Amp', 0.1, 10.0, valinit=self.amplitude)
-
-        self.sfreq.on_changed(self.update)
-        self.samp.on_changed(self.update)
 
     def getYAt(self, time):
         return self.amplitude * np.sin(2 * np.pi * self.frequency * time)
@@ -47,10 +31,7 @@ class sine(signal):
     def update(self):
         self.frequency = self.sfreq.val
         self.amplitude = self.samp.val
-        self.s = self.makeList(self.t)
-        self.l.set_ydata(self.s)
-        self.fig.canvas.draw_idle()
-        plt.show()
+
 
 class cosine(signal):
     def __init__(self, frequency = 1, amplitude = 1):
@@ -65,6 +46,7 @@ class cosine(signal):
 
     def setAmp(self, amplitude):
         self.amplitude = amplitude
+
 
 class square(signal):
     def __init__(self, frequency = 1, amplitude = 1, dutyCycle = 0.5):
@@ -92,6 +74,8 @@ class square(signal):
         self.time = 1 / self.frequency
         self.onTime = self.time * self.dutyCycle
 
+// ToDo: Dreieck, Sägezahn
+
 
 class const(signal):
     def __init__(self, value):
@@ -104,9 +88,16 @@ class const(signal):
         self._value = value
 
 
+// Rechenoperationen
 class add(signal):
     def __init__(self, signalA, signalB):
         self.sigA = signalA
+        self.sigB = signalB
+
+    def setSigA(self, signalA):
+        self.sigA = signalA
+
+    def setSigB(self, signalB):
         self.sigB = signalB
 
     def getYAt(self, time):
@@ -118,6 +109,12 @@ class sub(signal):
         self.sigA = signalA
         self.sigB = signalB
 
+    def setSigA(self, signalA):
+        self.sigA = signalA
+
+    def setSigB(self, signalB):
+        self.sigB = signalB
+
     def getYAt(self, time):
         return self.sigA.getYAt(time) - self.sigB.getYAt(time)
 
@@ -125,6 +122,12 @@ class sub(signal):
 class mul(signal):
     def __init__(self, signalA, signalB):
         self.sigA = signalA
+        self.sigB = signalB
+
+    def setSigA(self, signalA):
+        self.sigA = signalA
+
+    def setSigB(self, signalB):
         self.sigB = signalB
 
     def getYAt(self, time):
@@ -136,5 +139,28 @@ class div(signal):
         self.sigA = signalA
         self.sigB = signalB
 
+    def setSigA(self, signalA):
+        self.sigA = signalA
+
+    def setSigB(self, signalB):
+        self.sigB = signalB
+
     def getYAt(self, time):
         return self.sigA.getYAt(time) / self.sigB.getYAt(time)
+
+
+class shift(signal):
+    def __init__(self, signal, offset):
+        self.signal = signal
+        self.offset = offset
+
+    def setSignal(self, signal):
+        self.signal = signal
+
+    def setOffset(self, offset):
+        self.offset = offset
+
+    def getYAt(self, time):
+        return self.signal.getYAt(time + self.offset)
+
+// ToDo: Stauchung
