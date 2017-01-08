@@ -9,11 +9,11 @@ class signal(metaclass=ABCMeta):
     def getYAt(self, x):
         pass
 
-    def makeList(self, inList):
+    def getList(self, inList):
         outList = [self.getYAt(x) for x in inList]
         return outList
 
-
+# Kontinuierliche Signale
 class sine(signal):
     def __init__(self, frequency = 1, amplitude = 1):
         self.frequency = frequency
@@ -148,7 +148,7 @@ class div(signal):
     def getYAt(self, time):
         return self.sigA.getYAt(time) / self.sigB.getYAt(time)
 
-
+# Verschiebung
 class shift(signal):
     def __init__(self, signal, offset):
         self.signal = signal
@@ -163,30 +163,31 @@ class shift(signal):
     def getYAt(self, time):
         return self.signal.getYAt(time + self.offset)
 
+# Faltung
 class convolve(signal):
     def __init__(self, signalA, signalB, samplRate = 1, start = 0, end = 100):
         self.sigA = signalA
         self.sigB = signalB
-        this.samplingRate = samplRate
-        this.start = start
-        this.end = end
+        self.samplingRate = samplRate
+        self.start = start
+        self.end = end
 
     def getYAt(self, time):
         self.update()
-        return this.conv[time]
+        return self.conv[time]
 
     def setSamplRate(self, samplRate):
-        this.samplingRate = samplRate
+        self.samplingRate = samplRate
 
     def update(self):
-        this.list = np.range(this.start, this.end, this.samplingRate)
-        AVals = signalA.makeList(this.list)
-        BVals = signalB.makeList(this.list)
-        this.conv = np.convolve(AVals, BVals)
+        self.list = np.range(self.start, self.end, self.samplingRate)
+        AVals = self.sigA.getList(self.list)
+        BVals = self.sigB.getList(self.list)
+        self.conv = np.convolve(AVals, BVals)
 
-    def makeList(self, inList):
-        AVals = signalA.makeList(inList)
-        BVals = signalB.makeList(inList)
+    def getList(self, inList):
+        AVals = self.sigA.getList(inList)
+        BVals = self.sigB.getList(inList)
         return np.convolve(AVals, BVals)
 
 # ToDo: Stauchung
