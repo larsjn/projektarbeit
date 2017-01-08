@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-// Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
+# Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
     @abstractmethod
     def getYAt(self, x):
@@ -74,7 +74,7 @@ class square(signal):
         self.time = 1 / self.frequency
         self.onTime = self.time * self.dutyCycle
 
-// ToDo: Dreieck, Sägezahn
+# ToDo: Dreieck, Sägezahn
 
 
 class const(signal):
@@ -88,7 +88,7 @@ class const(signal):
         self._value = value
 
 
-// Rechenoperationen
+# Rechenoperationen
 class add(signal):
     def __init__(self, signalA, signalB):
         self.sigA = signalA
@@ -164,7 +164,7 @@ class shift(signal):
         return self.signal.getYAt(time + self.offset)
 
 class convolve(signal):
-    def __init__(self, signalA, signalB, samplRate = globals.samplingRate, start = globals.intvStart, end = globals.intvEnd):
+    def __init__(self, signalA, signalB, samplRate = 1, start = 0, end = 100):
         self.sigA = signalA
         self.sigB = signalB
         this.samplingRate = samplRate
@@ -184,9 +184,9 @@ class convolve(signal):
         BVals = signalB.makeList(this.list)
         this.conv = np.convolve(AVals, BVals)
 
-    def makeList(self, inList)
+    def makeList(self, inList):
         AVals = signalA.makeList(inList)
         BVals = signalB.makeList(inList)
         return np.convolve(AVals, BVals)
 
-// ToDo: Stauchung
+# ToDo: Stauchung
