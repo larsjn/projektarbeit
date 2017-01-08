@@ -163,4 +163,30 @@ class shift(signal):
     def getYAt(self, time):
         return self.signal.getYAt(time + self.offset)
 
+class convolve(signal):
+    def __init__(self, signalA, signalB, samplRate = globals.samplingRate, start = globals.intvStart, end = globals.intvEnd):
+        self.sigA = signalA
+        self.sigB = signalB
+        this.samplingRate = samplRate
+        this.start = start
+        this.end = end
+
+    def getYAt(self, time):
+        self.update()
+        return this.conv[time]
+
+    def setSamplRate(self, samplRate):
+        this.samplingRate = samplRate
+
+    def update(self):
+        this.list = np.range(this.start, this.end, this.samplingRate)
+        AVals = signalA.makeList(this.list)
+        BVals = signalB.makeList(this.list)
+        this.conv = np.convolve(AVals, BVals)
+
+    def makeList(self, inList)
+        AVals = signalA.makeList(inList)
+        BVals = signalB.makeList(inList)
+        return np.convolve(AVals, BVals)
+
 // ToDo: Stauchung
