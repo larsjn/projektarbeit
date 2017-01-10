@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
-import lib.Input_Function as fct
+#import lib.Create_Function_Widgetsas fct
 import operator as op
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
@@ -40,45 +40,50 @@ class discrete(signal):
 # Basis-Klasse für Rechenoperationen (?)
 
 
-class create(signal):
-    def __init__ (self):
-        self.FFunction = None
-        self.FFunction = fct.Class_Create_New_Function()
-        h=self.FFunction.Create(None)
 
-    def delete_Values(self):
-        if self.FFunction != None:
-            del self.FFunction
-            self.FFunction = None
-    def getXnparray(self):
-        if self.FFunction != None:
-            return self.FFunction.FxWerte
+# Ich weiß jetzt nicht genau wie du das haben willst habe ein Bsp in der Demo gepack wie du an die werte kommen würdest
 
-    def getYnparray(self):
-        if self.FFunction != None:
-            return self.FFunction.FyWerte
 
-    def getXList(self):
-        if self.FFunction != None:
-            return self.FFunction.FxWerte.tolist()
 
-    def getYList(self):
-        if self.FFunction != None:
-            return self.FFunction.FyWerte.tolist()
+#class create(signal):
+#    def __init__ (self):
+#        self.FFunction = None
+#        self.FFunction = fct.Class_Create_New_Function()
+#        h=self.FFunction.Create(None)
+#
+#    def delete_Values(self):
+#        if self.FFunction != None:
+#            del self.FFunction
+#            self.FFunction = None
+#    def getXnparray(self):
+#        if self.FFunction != None:
+#            return self.FFunction.FxWerte
+#
+#    def getYnparray(self):
+#        if self.FFunction != None:
+#            return self.FFunction.FyWerte
+#
+#    def getXList(self):
+#        if self.FFunction != None:
+#            return self.FFunction.FxWerte.tolist()
+#    
+#    def getYList(self):
+#        if self.FFunction != None:
+#            return self.FFunction.FyWerte.tolist()
+#
+#    def getYAt(self,Ax):
+#        try:
+#            xList = self.FFunction.FxWerte.tolist()
+#            i = xList.index(Ax)
+#            yList = self.FFunction.FyWerte.tolist()
+#            out = yList[i]
+#        except ValueError:
+#            out = None
+#        return out
 
-    def getYAt(self,Ax):
-        try:
-            xList = self.FFunction.FxWerte.tolist()
-            i = xList.index(Ax)
-            yList = self.FFunction.FyWerte.tolist()
-            out = yList[i]
-        except ValueError:
-            out = None
-        return out
-
-    def getList(self, inList):
-        outList = [self.getYAt(x) for x in inList]
-        return outList
+#    def getList(self, inList):
+#        outList = [self.getYAt(x) for x in inList]
+#        return outList
 
 # Kontinuierliche Signale
 class sine(contiuous):
