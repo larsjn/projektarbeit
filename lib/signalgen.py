@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
 import lib.Input_Function as fct
+import operator as op
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
@@ -17,14 +18,27 @@ class signal(metaclass=ABCMeta):
     def __truediv__(self, other):
         return div(self, other)
 
-    @abstractmethod
-    def getYAt(self, x):
-        pass
-
     def getList(self, inList):
 
         outList = [self.getYAt(x) for x in inList]
         return outList
+
+# Basis-Klasse für kontinuierliche Signale
+class contiuous(signal):
+    def _type(self):
+        return self.__class__.__name__
+
+    @abstractmethod
+    def getYAt(self, x):
+        pass
+
+# Basis-Klasse für diskrete Signale
+class discrete(signal):
+    def _type(self):
+        return self.__class__.__name__
+
+# Basis-Klasse für Rechenoperationen (?)
+
 
 class create(signal):
     def __init__ (self):
@@ -67,7 +81,7 @@ class create(signal):
         return outList
 
 # Kontinuierliche Signale
-class sine(signal):
+class sine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):
         self.frequency = frequency
         self.amplitude = amplitude
@@ -86,7 +100,7 @@ class sine(signal):
         self.amplitude = self.samp.val
 
 
-class cosine(signal):
+class cosine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):
         self.frequency = frequency
         self.amplitude = amplitude
@@ -101,7 +115,7 @@ class cosine(signal):
         self.amplitude = amplitude
 
 
-class square(signal):
+class square(contiuous):
     def __init__(self, frequency = 1, amplitude = 1, dutyCycle = 0.5):
         self.frequency = frequency
         self.amplitude = amplitude
@@ -130,7 +144,7 @@ class square(signal):
 # ToDo: Dreieck, Sägezahn
 
 
-class const(signal):
+class const(contiuous):
     def __init__(self, value):
         self._value = value
 
@@ -217,7 +231,7 @@ class shift(signal):
         return self.signal.getYAt(time + self.offset)
 
 # Faltung
-class convolve(signal):
+class convolve(discrete):
     def __init__(self, signalA, signalB, samplRate = 1, start = 0, end = 100):
         self.sigA = signalA
         self.sigB = signalB
@@ -236,9 +250,6 @@ class convolve(signal):
         except ValueError:
             out = None
         return out
-#
-#        return self.conv[time]
-
 
     def setSamplRate(self, samplRate):
         self.samplingRate = samplRate
