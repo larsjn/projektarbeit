@@ -1,19 +1,75 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
+import lib.Input_Function as fct
 
 
-// Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
+
+# Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
+    def __add__(self, other):
+        return add(self, other)
+
+    def __sub__(self, other):
+        return sub(self, other)
+
+    def __mul__(self, other):
+        return mul(self, other)
+
+    def __truediv__(self, other):
+        return div(self, other)
+
     @abstractmethod
     def getYAt(self, x):
         pass
 
-    def makeList(self, inList):
+    def getList(self, inList):
+        outList = [self.getYAt(x) for x in inList]
+        return outList
+
+class create(signal):
+    def __init__ (self):
+        self.FFunction = None
+        self.FFunction = fct.Class_Create_New_Function()
+        h=self.FFunction.Create(None)
+
+    def delete_Values(self):
+        if self.FFunction != None:
+            del self.FFunction
+            self.FFunction = None
+    def getXnparray(self):
+        if self.FFunction != None:
+            return self.FFunction.FxWerte
+
+    def getYnparray(self):
+        if self.FFunction != None:
+            return self.FFunction.FyWerte
+
+    def getXList(self):
+        if self.FFunction != None:
+            return self.FFunction.FxWerte.tolist()
+
+    def getYList(self):
+        if self.FFunction != None:
+            return self.FFunction.FyWerte.tolist()
+
+    def getYAt(self,Ax):
+        try:
+            xList = self.FFunction.FxWerte.tolist()
+            i = xList.index(Ax)
+            yList = self.FFunction.FyWerte.tolist()
+            out = yList[i]
+        except ValueError:
+            out = None
+        return out
+
+    def getList(self, inList):
         outList = [self.getYAt(x) for x in inList]
         return outList
 
 
+
+# Kontinuierliche Signale
 class sine(signal):
     def __init__(self, frequency = 1, amplitude = 1):
         self.frequency = frequency
@@ -74,7 +130,7 @@ class square(signal):
         self.time = 1 / self.frequency
         self.onTime = self.time * self.dutyCycle
 
-// ToDo: Dreieck, Sägezahn
+# ToDo: Dreieck, Sägezahn
 
 
 class const(signal):
@@ -88,7 +144,7 @@ class const(signal):
         self._value = value
 
 
-// Rechenoperationen
+# Rechenoperationen
 class add(signal):
     def __init__(self, signalA, signalB):
         self.sigA = signalA
@@ -148,7 +204,7 @@ class div(signal):
     def getYAt(self, time):
         return self.sigA.getYAt(time) / self.sigB.getYAt(time)
 
-
+# Verschiebung
 class shift(signal):
     def __init__(self, signal, offset):
         self.signal = signal
@@ -163,4 +219,42 @@ class shift(signal):
     def getYAt(self, time):
         return self.signal.getYAt(time + self.offset)
 
-// ToDo: Stauchung
+# Faltung
+class convolve(signal):
+    def __init__(self, signalA, signalB, samplRate = 1, start = 0, end = 100):
+        self.sigA = signalA
+        self.sigB = signalB
+        self.samplingRate = samplRate
+        self.start = start
+        self.end = end
+
+    def getYAt(self, time):
+        try:
+            self.update()
+            xList = self.sigA.getXList()
+            i = xList.index(time)
+            yList = self.conv.tolist()
+            out = yList[i]
+        except ValueError:
+            out = None
+        return out
+#
+#        return self.conv[time]
+
+    def setSamplRate(self, samplRate):
+        self.samplingRate = samplRate
+
+    def update(self):
+        self.list = np.arange(self.start, self.end, self.samplingRate)
+        AVals = self.sigA.getList(self.list)
+        BVals = self.sigB.getList(self.list)
+        print('AVals'  + str(AVals))
+        print('BVals'  + str(AVals))
+        self.conv = np.convolve(AVals, BVals)
+
+    def getList(self, inList):
+        AVals = self.sigA.getList(inList)
+        BVals = self.sigB.getList(inList)
+        return np.convolve(AVals, BVals)
+
+# ToDo: Stauchung
