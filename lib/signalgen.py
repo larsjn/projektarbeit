@@ -3,35 +3,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 import lib.Input_Function as fct
 
+
+
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
-    def __add__(self, other):
-        return add(self, other)
-
-    def __sub__(self, other):
-        return sub(self, other)
-
-    def __mul__(self, other):
-        return mul(self, other)
-
-    def __truediv__(self, other):
-        return div(self, other)
-
     @abstractmethod
+
     def getYAt(self, x):
         pass
 
     def getList(self, inList):
-
         outList = [self.getYAt(x) for x in inList]
         return outList
-
+    
 class create(signal):
     def __init__ (self):
-        self.FFunction = None
+        self.FFunction = None    
         self.FFunction = fct.Class_Create_New_Function()
         h=self.FFunction.Create(None)
-
+        
     def delete_Values(self):
         if self.FFunction != None:
             del self.FFunction
@@ -39,18 +29,18 @@ class create(signal):
     def getXnparray(self):
         if self.FFunction != None:
             return self.FFunction.FxWerte
-
+        
     def getYnparray(self):
         if self.FFunction != None:
-            return self.FFunction.FyWerte
-
+            return self.FFunction.FyWerte   
+            
     def getXList(self):
         if self.FFunction != None:
             return self.FFunction.FxWerte.tolist()
-
+        
     def getYList(self):
         if self.FFunction != None:
-            return self.FFunction.FyWerte.tolist()
+            return self.FFunction.FyWerte.tolist()   
 
     def getYAt(self,Ax):
         try:
@@ -61,11 +51,13 @@ class create(signal):
         except ValueError:
             out = None
         return out
-
+            
     def getList(self, inList):
         outList = [self.getYAt(x) for x in inList]
         return outList
-
+        
+        
+        
 # Kontinuierliche Signale
 class sine(signal):
     def __init__(self, frequency = 1, amplitude = 1):
@@ -226,7 +218,6 @@ class convolve(signal):
         self.end = end
 
     def getYAt(self, time):
-
         try:
             self.update()
             xList = self.sigA.getXList()
@@ -236,21 +227,18 @@ class convolve(signal):
         except ValueError:
             out = None
         return out
-#
+#        
 #        return self.conv[time]
-
 
     def setSamplRate(self, samplRate):
         self.samplingRate = samplRate
 
     def update(self):
-
         self.list = np.arange(self.start, self.end, self.samplingRate)
         AVals = self.sigA.getList(self.list)
         BVals = self.sigB.getList(self.list)
         print('AVals'  + str(AVals))
         print('BVals'  + str(AVals))
-
         self.conv = np.convolve(AVals, BVals)
 
     def getList(self, inList):
