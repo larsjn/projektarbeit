@@ -744,8 +744,7 @@ class Class_btn_Menu (object) :
         if self.FEnableDebugPrint:
             print('Fenster Nr: ' + self.FSubCount +':' +"Debug: btn_Tab")
 
-        print(('Hinweis: Leider ist es relativ kompliziert auch "Punkt vor Strich" zu beachten.',
-               'Daher einfach Punktrechnungen in Klammern setzen'))
+       
 
         return btn_HBox
 
@@ -985,7 +984,10 @@ class Class_Create_New_Function(object) :
             self.FAccItems.pop(2)
         self.FAccItems = self.FAccItems + [ form_fkt_mask ]
         self.FAcc.children = self.FAccItems
-        self.FAcc.selected_index = len(self.FAccItems)-1
+        self.FAcc.selected_index = len(self.FAccItems)-1#
+        
+        print(('Hinweis: Leider ist es relativ kompliziert auch "Punkt vor Strich" zu beachten.'
+                'Daher einfach Punktrechnungen in Klammern setzen'))
 # ---------------------------------------------------- End def -----------------------------------------------------
     def Btn_Event_x_Werte_einfuegen(self,ADummy):
         if self.FIsDiscret:
