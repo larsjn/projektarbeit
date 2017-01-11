@@ -25,9 +25,6 @@ class signal(metaclass=ABCMeta):
 
 # Basis-Klasse für kontinuierliche Signale
 class contiuous(signal):
-    def _type(self):
-        return self.__class__.__name__
-
     # Gibt den y-Wert für einen gegebenen x-Wert zurück
     @abstractmethod
     def getYAt(self, x):
@@ -35,8 +32,7 @@ class contiuous(signal):
 
 # Basis-Klasse für diskrete Signale
 class discrete(signal):
-    def _type(self):
-        return self.__class__.__name__
+    pass
 
 # Basis-Klasse für Rechenoperationen (?)
 
@@ -45,14 +41,14 @@ class discrete(signal):
 class create(signal):
     def __init__ (self, type):
         if type == "discrete":
-            isDiscrete = True
+            self.isDiscrete = True
         elif type == "continuous":
-            isDiscrete = False
+            self.isDiscrete = False
         else:
             print("Mögliche Parameter: discrete, continuous")
             return None
 
-        self.function = fct.Class_Create_New_Function(isDiscrete)
+        self.function = fct.Class_Create_New_Function(self.isDiscrete)
         self.function.Create(None)
 
     def delete_Values(self):
@@ -76,25 +72,40 @@ class create(signal):
         if self.function != None:
             return self.function.FyWerte.tolist()
 
-    def getYAt(self,Ax):
-        try:
-            xList = self.function.FxWerte.tolist()
-            i = xList.index(Ax)
-            yList = self.function.FyWerte.tolist()
-            out = yList[i]
-        except ValueError:
-            out = None
-        return out
+    def getYAt(self, time):
+        if self.isDiscrete == False:
+            return self.function.FResultSignal.getYAt(time)
+
+        else:
+            print("Signal ist nicht kontinuierlich")
+            return None
+        # try:
+        #     xList = self.function.FxWerte.tolist()
+        #     i = xList.index(Ax)
+        #     yList = self.function.FyWerte.tolist()
+        #     out = yList[i]
+        # except ValueError:
+        #     out = None
+        # return out
 
     def getList(self, inList):
         outList = [self.getYAt(x) for x in inList]
         return outList
+
+    def __str__(self):
+        if self.isDiscrete == False:
+            return self.function.FResultSignal.__str__()
+
+        else:
+            print("Signal ist nicht kontinuierlich")
+            return None
 
 # Kontinuierliche Signale
 class sine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):
         self.frequency = frequency
         self.amplitude = amplitude
+        self.type = "contiuous"
 
     def getYAt(self, time):
         return self.amplitude * np.sin(2 * np.pi * self.frequency * time)
@@ -109,11 +120,14 @@ class sine(contiuous):
         self.frequency = self.sfreq.val
         self.amplitude = self.samp.val
 
+    def __str__(self):
+        return "{0}*sin(2*PI*{1}*t)".format(self.amplitude, self.frequency)
 
 class cosine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):
         self.frequency = frequency
         self.amplitude = amplitude
+        self.type = "contiuous"
 
     def getYAt(self, time):
         return self.amplitude * np.cos(2 * np.pi * self.frequency * time)
@@ -124,6 +138,9 @@ class cosine(contiuous):
     def setAmp(self, amplitude):
         self.amplitude = amplitude
 
+    def __str__(self):
+        return "{0}*cos(2*PI*{1}*t)".format(self.amplitude, self.frequency)
+
 
 class square(contiuous):
     def __init__(self, frequency = 1, amplitude = 1, dutyCycle = 0.5):
@@ -131,6 +148,7 @@ class square(contiuous):
         self.amplitude = amplitude
         self.dutyCycle = dutyCycle
         self.update()
+        self.type = "contiuous"
 
     def getYAt(self, time):
         if((time % self.time) < self.onTime):
@@ -156,13 +174,17 @@ class square(contiuous):
 
 class const(contiuous):
     def __init__(self, value):
-        self._value = value
+        self.value = value
+        self.type = "contiuous"
 
     def getYAt(self, x):
         return self._value
 
     def setValue(self, value):
         self._value = value
+
+    def __str__(self):
+        return str(self.value)
 
 
 # Rechenoperationen
@@ -180,6 +202,9 @@ class add(signal):
     def getYAt(self, time):
         return self.sigA.getYAt(time) + self.sigB.getYAt(time)
 
+    def __str__(self):
+        return self.sigA.__str__() + "+" + self.sigB.__str__()
+
 
 class sub(signal):
     def __init__(self, signalA, signalB):
@@ -194,6 +219,9 @@ class sub(signal):
 
     def getYAt(self, time):
         return self.sigA.getYAt(time) - self.sigB.getYAt(time)
+
+    def __str__(self):
+        return self.sigA.__str__() + "-" + self.sigB.__str__()
 
 
 class mul(signal):
@@ -210,6 +238,9 @@ class mul(signal):
     def getYAt(self, time):
         return self.sigA.getYAt(time) * self.sigB.getYAt(time)
 
+    def __str__(self):
+        return self.sigA.__str__() + "*" + self.sigB.__str__()
+
 
 class div(signal):
     def __init__(self, signalA, signalB):
@@ -224,6 +255,9 @@ class div(signal):
 
     def getYAt(self, time):
         return self.sigA.getYAt(time) / self.sigB.getYAt(time)
+
+    def __str__(self):
+        return self.sigA.__str__() + "/" + self.sigB.__str__()
 
 # Verschiebung
 class shift(signal):
@@ -248,6 +282,7 @@ class convolve(discrete):
         self.samplingRate = samplRate
         self.start = start
         self.end = end
+        self.type = "discrete"
 
     def getYAt(self, time):
 
