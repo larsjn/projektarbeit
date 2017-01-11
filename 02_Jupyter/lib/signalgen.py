@@ -103,8 +103,8 @@ class create(signal):
 # Kontinuierliche Signale
 class sine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):
-        self.frequency = frequency
-        self.amplitude = amplitude
+        self.frequency = float(frequency)
+        self.amplitude = float(amplitude)
         self.type = "contiuous"
 
     def getYAt(self, time):
@@ -125,12 +125,12 @@ class sine(contiuous):
 
 class cosine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):
-        self.frequency = frequency
-        self.amplitude = amplitude
+        self.frequency = float(frequency)
+        self.amplitude = float(amplitude)
         self.type = "contiuous"
 
     def getYAt(self, time):
-        return self.amplitude * np.cos(2 * np.pi * self.frequency * time)
+        return self.amplitude * np.cos(2.0 * np.pi * self.frequency * time)
 
     def setFreq(self, frequency):
         self.frequency = frequency

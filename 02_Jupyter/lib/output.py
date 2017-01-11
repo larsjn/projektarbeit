@@ -19,8 +19,8 @@ class diagram:
         intv = 1 / self.samplingRate
         self.XVals = np.arange(self.start, self.end, intv)
         self.YVals = self.signal.getList(self.XVals)
-        print(self.XVals)
-        print(self.YVals)
+        #print(self.XVals)
+        #print(self.YVals)
         plt.plot(self.XVals, self.YVals)
         plt.xlabel("Zeit")
         plt.ylabel("Amplitude")

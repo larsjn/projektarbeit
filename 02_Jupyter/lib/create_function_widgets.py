@@ -600,11 +600,11 @@ class Class_btn_Menu (object) :
                 self.FInputA = self.FSubCurrentSignal
                 if self.FInputContCos:
                     self.FInputContCos = False
-                    self.FInputB = sig.sine(self.FFrequenz,str(Value))
+                    self.FInputB = sig.sine(self.FFrequenz, Value)
                     self.Ftxt_All_Input.value = self.Ftxt_All_Input.value + self.RS_Sin+'f,'+SymValue+')'
                 elif self.FInputContSin:
                     self.FInputContSin = False
-                    self.FInputB = sig.cosine(self.FFrequenz,str(Value))
+                    self.FInputB = sig.cosine(self.FFrequenz, Value)
                     self.Ftxt_All_Input.value = self.Ftxt_All_Input.value + self.RS_Sin+'f,'+SymValue+')'
 
                 else:
