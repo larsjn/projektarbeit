@@ -13,7 +13,7 @@ from ipywidgets import HBox
 from ipywidgets import Button
 from ipywidgets import Text
 
-from ipywidgets import Dropdown
+#from ipywidgets import Dropdown
 
 from ipywidgets import FloatText
 from ipywidgets import Tab
@@ -188,7 +188,7 @@ class Class_btn_Menu (object) :
                 print('Fenster Nr: ' + self.FSubCount +':' +'Debug: ' + 'Sub: InputA: ' + str(self.FInputA) + ' InputB: ' + str(self.FInputB) )
             if self.FIsSub:
                 if self.FIsDiscret:
-                    self.FSubCurrentValue = np.sub(self.FInputA,self.FInputB)
+                    self.FSubCurrentValue = np.subtract(self.FInputA,self.FInputB)
                 else:
                     del self.FSubCurrentSignal
                     self.FSubCurrentSignal = sig.sub(self.FInputA,self.FInputB)
@@ -201,7 +201,7 @@ class Class_btn_Menu (object) :
                     print('Fenster Nr: ' + self.FSubCount +':' +'Debug: ' + 'SubCurrentValue: ' + str(self.FSubCurrentSignal))
             else:
                 if self.FIsDiscret:
-                    self.FCurrentValue = np.sub(self.FInputA,self.FInputB)
+                    self.FCurrentValue = np.subtract(self.FInputA,self.FInputB)
                 else:
                     del self.FCurrentSignal
                     self.FCurrentSignal = sig.sub(self.FInputA,self.FInputB)
@@ -515,7 +515,7 @@ class Class_btn_Menu (object) :
 
         if self.FIsDiscret:
             self.disable_btn(None)
-            alterBefehl = self.FBefehl
+   #         alterBefehl = self.FBefehl
             self.FBefehl = self.RS_Cos
             self.FFkt=self.RS_Cos
             self.Ftxt_All_Input.value = self.Ftxt_All_Input.value + self.RS_Cos
@@ -538,7 +538,7 @@ class Class_btn_Menu (object) :
         if self.FEnableDebugPrint:
             print('Fenster Nr: ' + self.FSubCount +':' +'Debug: ' + self.RS_Klammer_auf)
         self.Ftxt_All_Input.value = self.Ftxt_All_Input.value + self.RS_Klammer_auf
-        alterBefehl = self.FBefehl
+      #  alterBefehl = self.FBefehl
         self.FBefehl = self.RS_Klammer_auf
         self.disable_btn(None)
         self.FFkt=self.RS_Klammer_auf
@@ -910,14 +910,14 @@ class Class_Create_New_Function(object) :
             if self.FListClass_btn_Menu[0].FFkt == None:
                 self.FCurrentValue = self.FListClass_btn_Menu[0].FCurrentValue
 
-
+         #   print('self.FListClass_btn_Menu[0].FFkt             ' + str(self.FListClass_btn_Menu[0].FFkt))
+         #   print('self.FListClass_btn_Menu[0].FCurrentValue    ' + str(self.FListClass_btn_Menu[0].FCurrentValue))
+         #   print('self.FListClass_btn_Menu[0].FSubCurrentValue ' + str(self.FListClass_btn_Menu[0].FSubCurrentValue))
+         #   print('self.FCurrentValue                           ' + str(self.FCurrentValue))
+         #   print('self.FSubCurrentValue                        ' + str(self.FSubCurrentValue))
+            
             if isinstance(self.FCurrentValue , float) :
-                 self.FCurrentValue = [self.FCurrentValue for i in range(len(self.FxWerte))]
-#                 yconst=  self.FCurrentValue
-#                 self.FCurrentValue = [ yconst]
-#                 for x in range(0, len(self.FxWerte)):
-#                     self.FCurrentValue = self.FCurrentValue + [ yconst]
-
+                self.FCurrentValue = [self.FCurrentValue for i in range(len(self.FxWerte))]
 
             self.FyWerte = self.FCurrentValue
 
@@ -927,8 +927,7 @@ class Class_Create_New_Function(object) :
             if self.FListClass_btn_Menu[0].FFkt == None:
                 self.FCurrentSignal = self.FListClass_btn_Menu[0].FCurrentSignal
             self.FResultSignal = self.FCurrentSignal
-#             print(self.FResultSignal)
-#             print(str(self.FResultSignal.getYAt(5)))
+
 
         self.FAcc.visible = False  # Leider ist es nicht möglich das widget "ordentlich" zu löschen,
                                     # daher nur unsichtbar gemacht

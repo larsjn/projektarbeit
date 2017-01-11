@@ -16,6 +16,28 @@ class diagram:
         self.plot()
 
     def plot(self):
+<<<<<<< HEAD
+        
+        if self.signal.FisDiscrete:
+            xValues = self.signal.getXList()
+            yValues = self.signal.getYList()
+            markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')    
+            plt.setp(markerline, linewidth=2, color='b')
+            plt.setp(stemlines, linewidth=1, color='b') 
+            plt.setp(baseline, linewidth=2,color='black')
+            plt.show()
+            
+        else:             
+            intv = 1 / self.samplingRate
+            self.XVals = np.arange(self.start, self.end, intv)
+            self.YVals = self.signal.getList(self.XVals)
+            print(self.XVals)
+            print(self.YVals)
+            plt.plot(self.XVals, self.YVals)
+            plt.xlabel("Zeit")
+            plt.ylabel("Amplitude")
+            plt.show()
+=======
         intv = 1 / self.samplingRate
         self.XVals = np.arange(self.start, self.end, intv)
         self.YVals = self.signal.getList(self.XVals)
@@ -25,6 +47,7 @@ class diagram:
         plt.xlabel("Zeit")
         plt.ylabel("Amplitude")
         plt.show()
+>>>>>>> origin/cfw-implementierung
 
 class writeToFile:
     def __init__(self):
