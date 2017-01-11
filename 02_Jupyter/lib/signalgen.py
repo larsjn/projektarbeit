@@ -41,24 +41,17 @@ class discrete(signal):
 class create(signal):
     def __init__ (self, type):
         if type == "discrete":
-<<<<<<< HEAD
+
             self.FisDiscrete = True
         elif type == "continuous":
             self.FisDiscrete = False
-=======
-            self.isDiscrete = True
-        elif type == "continuous":
-            self.isDiscrete = False
->>>>>>> origin/cfw-implementierung
+
         else:
             print("Mögliche Parameter: discrete, continuous")
             return None
 
-<<<<<<< HEAD
         self.function = fct.Class_Create_New_Function(self.FisDiscrete)
-=======
-        self.function = fct.Class_Create_New_Function(self.isDiscrete)
->>>>>>> origin/cfw-implementierung
+
         self.function.Create(None)
 
     def delete_Values(self):
@@ -85,7 +78,7 @@ class create(signal):
                 else:
                     return self.function.FxWerte.tolist()
         return  None # Default Ausgabe wenn kein If erfüllt wird
-                        
+
     def getYList(self):
         if self.function != None:
             if self.FisDiscrete:
@@ -95,9 +88,8 @@ class create(signal):
                     return self.function.FyWerte.tolist()
         return  None # Default Ausgabe wenn kein If erfüllt wird
 
-<<<<<<< HEAD
     def getYAt(self,Ax):
-        if self.FisDiscrete:  
+        if self.FisDiscrete:
             try:
                 xList = self.getXList()
                 i = xList.index(Ax)
@@ -105,25 +97,8 @@ class create(signal):
                 out = yList[i]
             except ValueError:
                 out = None
-            return out      
+            return out
         return  None # Default Ausgabe wenn kein If erfüllt wird
-=======
-    def getYAt(self, time):
-        if self.isDiscrete == False:
-            return self.function.FResultSignal.getYAt(time)
-
-        else:
-            print("Signal ist nicht kontinuierlich")
-            return None
-        # try:
-        #     xList = self.function.FxWerte.tolist()
-        #     i = xList.index(Ax)
-        #     yList = self.function.FyWerte.tolist()
-        #     out = yList[i]
-        # except ValueError:
-        #     out = None
-        # return out
->>>>>>> origin/cfw-implementierung
 
     def getList(self, inList):
         outList = [self.getYAt(x) for x in inList]
