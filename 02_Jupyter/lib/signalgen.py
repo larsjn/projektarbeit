@@ -178,7 +178,7 @@ class const(contiuous):
         self.type = "contiuous"
 
     def getYAt(self, x):
-        return self._value
+        return self.value
 
     def setValue(self, value):
         self._value = value
