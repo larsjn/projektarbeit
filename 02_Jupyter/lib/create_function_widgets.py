@@ -744,8 +744,7 @@ class Class_btn_Menu (object) :
         if self.FEnableDebugPrint:
             print('Fenster Nr: ' + self.FSubCount +':' +"Debug: btn_Tab")
 
-        print(('Hinweis: Leider ist es relativ kompliziert auch "Punkt vor Strich" zu beachten.',
-               'Daher einfach Punktrechnungen in Klammern setzen'))
+
 
         return btn_HBox
 
@@ -985,6 +984,9 @@ class Class_Create_New_Function(object) :
         self.FAccItems = self.FAccItems + [ form_fkt_mask ]
         self.FAcc.children = self.FAccItems
         self.FAcc.selected_index = len(self.FAccItems)-1
+
+        print(('Hinweis: Leider ist es relativ kompliziert auch "Punkt vor Strich" zu beachten.'
+               'Daher einfach Punktrechnungen in Klammern setzen'))
 # ---------------------------------------------------- End def -----------------------------------------------------
     def Btn_Event_x_Werte_einfuegen(self,ADummy):
         if self.FIsDiscret:
@@ -1002,7 +1004,9 @@ class Class_Create_New_Function(object) :
             btn_x_Werte_einfuegen = Button(layout=self.F_wdg_Layout,button_style='warning',description=self.RS_Btn_Use_x_Values)
             btn_x_Werte_einfuegen.on_click(self.Btn_Event_x_Werte_einfuegen)
             fs = self.FFloat_Abtastfrequenz.value
-            self.FxWerte = np.arange(-10,10+1/fs,1/fs)
+            print(fs)
+            print(np.arange(-1,1+1/fs,1/fs))
+            self.FxWerte = np.arange(-1,1+1/fs,1/fs)
             InitSubHBoxItems = [btn_Weiter,btn_x_Werte_einfuegen]
         else:
             InitSubHBoxItems = [btn_Weiter]
