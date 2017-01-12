@@ -105,7 +105,7 @@ class create(signal):
         return outList
 
     def __str__(self):
-        if self.isDiscrete == False:
+        if self.FisDiscrete == False:
             return self.function.FResultSignal.__str__()
 
         else:
