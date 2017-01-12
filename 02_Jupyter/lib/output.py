@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
-import lib.signalgen
+from . import signalgen as sig
 
 class diagram:
     def __init__(self, inputSig, samplingRate = 1, start = 0, end = 100):

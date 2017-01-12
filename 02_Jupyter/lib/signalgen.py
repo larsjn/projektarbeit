@@ -2,7 +2,9 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
 import lib.create_function_widgets as fct
+import lib.create_komplex as kpl
 import operator as op
+import lib.Plot_Widget as sigplt
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
@@ -39,79 +41,201 @@ class discrete(signal):
 
 # Eine Signal per Bildungsvorschrift erzeugen
 class create(signal):
-    def __init__ (self, type):
-        if type == "discrete":
-
+    def __init__ (self, type):        
+        self.RS_Typ_discrete    = "discrete"
+        self.RS_Typ_continuous  = "continuous"
+        self.RS_Typ_complex     = "complex"
+        
+        self.FTyp = type
+        if type ==  self.RS_Typ_discrete:
             self.FisDiscrete = True
-        elif type == "continuous":
+            self.FFunction = fct.Class_Create_New_Function(self.FisDiscrete)
+            self.FFunction.Create(None)
+        elif type ==  self.RS_Typ_continuous:
             self.FisDiscrete = False
-
+            self.FFunction = fct.Class_Create_New_Function(self.FisDiscrete)
+            self.FFunction.Create(None)
+        elif type ==  self.RS_Typ_complex:
+            self.FFunction = None
+            self.FComplex = kpl.create_complex()               
         else:
-            print("Mögliche Parameter: discrete, continuous")
+            print("Mögliche Parameter:"+ self.RS_Typ_discrete+","+self.RS_Typ_continuous+","+self.RS_Typ_complex)            
+
+    def delete_Values(self):        
+        if self.FTyp ==  self.RS_Typ_discrete:
+            if self.FFunction != None:
+                del self.FFunction
+                self.FFunction = None
+                return None
+        elif self.FTyp == self.RS_Typ_continuous:
             return None
-
-        self.function = fct.Class_Create_New_Function(self.FisDiscrete)
-
-        self.function.Create(None)
-
-    def delete_Values(self):
-        if self.function != None:
-            del self.function
-            self.function = None
-        return  None # Default Ausgabe wenn kein If erfüllt wird
-
-    def getXnparray(self):
-        if self.function != None:
-            return self.function.FxWerte
-        return  None # Default Ausgabe wenn kein If erfüllt wird
-
-    def getYnparray(self):
-        if self.function != None:
-            return self.function.FyWerte
-        return  None # Default Ausgabe wenn kein If erfüllt wird
-
-    def getXList(self):
-        if self.function != None:
-            if self.FisDiscrete:
-                if isinstance(self.function.FxWerte, (list)): # Prüfen ob schon eine Liste
-                    return self.function.FxWerte
+        elif self.FTyp == self.RS_Typ_complex:
+            if self.FComplex != None:
+                del self.FComplex
+                self.FComplex = None
+                return None
+        else:
+            return None 
+        return None       
+    def getXList(self):        
+        if self.FTyp ==  self.RS_Typ_discrete:
+            if self.FFunction != None:           
+                if isinstance(self.FFunction.FxWerte, (list)): # Prüfen ob schon eine Liste
+                    return self.FFunction.FxWerte
                 else:
-                    return self.function.FxWerte.tolist()
-        return  None # Default Ausgabe wenn kein If erfüllt wird
-
-    def getYList(self):
-        if self.function != None:
-            if self.FisDiscrete:
-                if isinstance(self.function.FyWerte, (list)): # Prüfen ob schon eine Liste
-                    return self.function.FyWerte
-                else:
-                    return self.function.FyWerte.tolist()
-        return  None # Default Ausgabe wenn kein If erfüllt wird
-
-    def getYAt(self,Ax):
-        if self.FisDiscrete:
-            try:
-                xList = self.getXList()
-                i = xList.index(Ax)
-                yList = self.getYList()
-                out = yList[i]
-            except ValueError:
-                out = None
-            return out
-        return  None # Default Ausgabe wenn kein If erfüllt wird
-
+                    return self.FFunction.FxWerte.tolist()
+        elif self.FTyp == self.RS_Typ_continuous:
+            return None
+        elif self.FTyp == self.RS_Typ_complex:
+            return None
+        else:
+            return None                     
+        return None # Default Ausgabe wenn kein If erfüllt wird  
+    def getYList(self):        
+        if self.FTyp ==  self.RS_Typ_discrete:
+             if self.FFunction != None:
+                 if isinstance(self.FFunction.FyWerte, (list)): # Prüfen ob schon eine Liste
+                    return self.FFunction.FyWerte
+                 else:
+                    return self.FFunction.FyWerte.tolist()
+        elif self.FTyp == self.RS_Typ_continuous:
+            return None
+        elif self.FTyp == self.RS_Typ_complex:
+            return None
+        else:
+            return  None      
+        return None # Default Ausgabe wenn kein If erfüllt wird          
+    def getYAt(self,Ax):        
+        if self.FTyp ==  self.RS_Typ_discrete:
+            if self.FFunction != None:
+                try:
+                    xList = self.getXList()
+                    i = xList.index(Ax)
+                    yList = self.getYList()
+                    out = yList[i]
+                except ValueError:
+                    out = None
+                return out
+        
+        elif self.FTyp == self.RS_Typ_continuous:
+            return None
+        elif self.FTyp == self.RS_Typ_complex:
+            return None
+        else:
+            return None               
+        return None # Default Ausgabe wenn kein If erfüllt wird  
     def getList(self, inList):
-        outList = [self.getYAt(x) for x in inList]
-        return outList
-
+        if self.FTyp ==  self.RS_Typ_discrete:
+            if self.FFunction != None:
+                outList = [self.getYAt(x) for x in inList]
+                return outList
+        elif self.FTyp == self.RS_Typ_continuous:
+            outList = [self.getYAt(x) for x in inList]
+            return outList
+        elif self.FTyp == self.RS_Typ_complex:
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird  
+   
+    def getZ(self,AAsNumpy=False):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            if self.FComplex  != None:
+                if not AAsNumpy:
+                    return self.FComplex.FZ
+                else:
+                    return np.array(self.FComplex.FZ)
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird    
+        
+    def getRe(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            if self.FComplex  != None:
+               return self.FComplex.FRe             
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird          
+        
+    def getIm(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            if self.FComplex  != None:
+               return self.FComplex.FIm             
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+    def getAngle(self,ADegree = True):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            if self.FComplex  != None:
+                if ADegree:
+                    return self.FComplex.FAngle
+                else:
+                    return self.FComplex.FAngleRad
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird             
+        
+    def getAbs(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            if self.FComplex  != None:
+                    return self.FComplex.FAbsolute
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+        
+        
+        
+    def plot(self, samplingRate = 1, start = 0, end = 100):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            if self.FFunction != None:
+                    sigplt.Class_Plot_Menu(self)
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None
+        elif self.FTyp == self.RS_Typ_complex:
+            if self.FComplex != None:
+                    sigplt.Class_Plot_Menu(self)
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird  
+        
     def __str__(self):
-        if self.FisDiscrete == False:
-            return self.function.FResultSignal.__str__()
-
+        if self.FTyp == self.RS_Typ_discrete:
+            return self.FFunction.FResultSignal.__str__()
         else:
             print("Signal ist nicht kontinuierlich")
-            return None
-
+        return None # Default Ausgabe wenn kein If erfüllt wird  
+        
+        
+        
+        
 # Kontinuierliche Signale
 class sine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):

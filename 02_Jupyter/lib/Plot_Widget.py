@@ -62,7 +62,7 @@ class Class_Plot_Menu (object) :
         
         self.Fsignal = inputSig
         self.FsamplingRate = samplingRate
-        self.FIsDiscrete = inputSig.FisDiscrete
+
         
         # Widgets
         self.F_wdg_Layout = Layout(display='flex',flex_flow='row',justify_content='center')
@@ -114,27 +114,53 @@ class Class_Plot_Menu (object) :
         self.FAcc = None
         
         self.show()
-    def btn_Event_show_plot(self,ADummy):
-        if self.FIsDiscrete :
-            xValues = self.Fsignal.getXList()
-            yValues = self.Fsignal.getYList()
-            markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')         
-
-            plt.setp(markerline, linewidth=self.FFloat_Markersize.value, color=self.FCol_Marker.value)
-            plt.setp(stemlines, linewidth=self.FFloat_Linewidth.value, color=self.FCol_Line.value)
-            plt.setp(baseline, linewidth=self.FFloat_Baselinewidth.value,color=self.FCol_Baseline.value)
-
-            plt.title(self.Ftxt_Diagrammtitle.value)
-            plt.xlabel(self.Ftxt_x_Achse_Titel.value)
-            plt.ylabel(self.Ftxt_y_Achse_Titel.value)
-            plt.grid(self.Fbol_Show_Grid.value)
-
-            plt.ylim([self.FFloat_y_Min.value,self.FFloat_y_Max.value])
-            plt.xlim([self.FFloat_x_Min.value,self.FFloat_x_Max.value])
-
-
-            plt.show()
         
+    def Copy_Input(self):
+       
+    
+         plt.title(self.Ftxt_Diagrammtitle.value)
+         plt.xlabel(self.Ftxt_x_Achse_Titel.value)
+         plt.ylabel(self.Ftxt_y_Achse_Titel.value)
+         plt.grid(self.Fbol_Show_Grid.value)
+    
+         plt.ylim([self.FFloat_y_Min.value,self.FFloat_y_Max.value])
+         plt.xlim([self.FFloat_x_Min.value,self.FFloat_x_Max.value])
+        
+    def btn_Event_show_plot(self,ADummy):
+
+        if self.Fsignal.FTyp ==  self.Fsignal.RS_Typ_discrete:
+             if self.Fsignal.FFunction != None:
+                xValues = self.Fsignal.getXList()
+                yValues = self.Fsignal.getYList()
+                markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')  
+                
+                plt.setp(markerline, linewidth=self.FFloat_Markersize.value, color=self.FCol_Marker.value)
+                plt.setp(stemlines, linewidth=self.FFloat_Linewidth.value, color=self.FCol_Line.value)
+                plt.setp(baseline, linewidth=self.FFloat_Baselinewidth.value,color=self.FCol_Baseline.value)
+                self.Copy_Input()
+    
+                plt.show()
+        elif self.Fsignal.FTyp == self.Fsignal.RS_Typ_continuous:
+            return  None           
+        elif self.Fsignal.FTyp == self.Fsignal.RS_Typ_complex:
+            if self.Fsignal.FComplex  != None:
+                 Z = self.Fsignal.getZ(True)
+                 plt.arrow(0,0, Z.real, Z.imag,linewidth=self.FFloat_Linewidth.value,color=self.FCol_Line.value,
+                           head_width=self.FFloat_Markersize.value/2, head_length=self.FFloat_Markersize.value,
+                           )
+                 self.Copy_Input()
+                 plt.show()
+                      
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+        
+        
+         
+           
+            
         
 
     def btn_Event_clear(self,ADummy):    
@@ -158,39 +184,75 @@ class Class_Plot_Menu (object) :
                           ]                           
         subHBox_2 = HBox(children = subHBox_2_items )        
         
-        subHBox_3_items = [Text(layout=self.F_wdg_Layout, value=self.RS_Marker_Farbe,disabled=True, visible = True),
-                           Text(layout=self.F_wdg_Layout, value=self.RS_Marker_Groeße,disabled=True, visible = True)
-                          ]                           
-        subHBox_3 = HBox(children = subHBox_3_items )        
+   
         
-        subHBox_4_items = [self.FCol_Marker,
-                           self.FFloat_Baselinewidth
-                          ]                           
-        subHBox_4 = HBox(children =  subHBox_4_items )        
+              
         
-        subHBox_5_items = [Text(layout=self.F_wdg_Layout, value=self.RS_Baseline_Farbe,disabled=True, visible = True),
+        
+        
+        if self.Fsignal.FTyp ==  self.Fsignal.RS_Typ_discrete:
+            subHBox_3_items = [Text(layout=self.F_wdg_Layout, value=self.RS_Marker_Farbe,disabled=True, visible = True),
+                               Text(layout=self.F_wdg_Layout, value=self.RS_Marker_Groeße,disabled=True, visible = True)
+                              ]                           
+            subHBox_3 = HBox(children = subHBox_3_items )        
+        
+            subHBox_4_items = [self.FCol_Marker,                         
+                               self.FFloat_Markersize
+                              ]                           
+            subHBox_4 = HBox(children =  subHBox_4_items )        
+        
+
+            subHBox_5_items = [Text(layout=self.F_wdg_Layout, value=self.RS_Baseline_Farbe,disabled=True, visible = True),
                            Text(layout=self.F_wdg_Layout, value=self.RS_Baseline_Staerke,disabled=True, visible = True),
                           ]                           
-        subHBox_5 = HBox(children =  subHBox_5_items )        
-        
-        subHBox_6_items = [self.FCol_Baseline,
-                           self.FFloat_Markersize
+            subHBox_5 = HBox(children =  subHBox_5_items )  
+            subHBox_6_items = [self.FCol_Baseline,
+                            self.FFloat_Baselinewidth
                           ]                           
-        subHBox_6 = HBox(children = subHBox_6_items)        
+            subHBox_6 = HBox(children = subHBox_6_items) 
+            
+            self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
+                                        self.Ftxt_Diagrammtitle,
+                                        subHBox_1,
+                                        subHBox_2,
+                                        subHBox_3,
+                                        subHBox_4,
+                                        subHBox_5,
+                                        subHBox_6,
+                                        Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
+                                        self.Fbol_Show_Grid                                  
+                                      ]
+            
+        else:
+            
+            subHBox_3_items = [
+                               Text(layout=self.F_wdg_Layout, value=self.RS_Marker_Groeße,disabled=True, visible = True)
+                              ]                           
+            subHBox_3 = HBox(children = subHBox_3_items )        
+        
+            subHBox_4_items = [                   
+                               self.FFloat_Markersize
+                              ]  
+            subHBox_4 = HBox(children =  subHBox_4_items )              
+            
+            self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
+                                        self.Ftxt_Diagrammtitle,
+                                        subHBox_1,
+                                        subHBox_2,
+                                        subHBox_3,
+                                        subHBox_4,
+
+                                        Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
+                                        self.Fbol_Show_Grid                                  
+                                      ]            
+            
+            
+
+     
         
         
  
-        self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
-                                    self.Ftxt_Diagrammtitle,
-                                    subHBox_1,
-                                    subHBox_2,
-                                    subHBox_3,
-                                    subHBox_4,
-                                    subHBox_5,
-                                    subHBox_6,
-                                    Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
-                                    self.Fbol_Show_Grid                                  
-                                  ]
+      
         self.FBoxAllgemein = VBox(children = self.FBoxAllgemeinItems)
         
         

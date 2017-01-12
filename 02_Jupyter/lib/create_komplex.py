@@ -101,8 +101,8 @@ class create_complex(object):
                                     self.FHBoxPolar                       
                                    ]
         
-        self.FWarten = False
-        
+        self.FPhaseWarten = False
+        self.FAlgWarten= False
         
         self.FEingabeSeite = VBox(layout=self.F_wdg_Layout,children=self.FEingabeSeiteItems)
         
@@ -112,37 +112,45 @@ class create_complex(object):
         self.create()
         
     def Timer_Event(self):# Warten da sonst Schleife der Änderungen 
-        self.FWarten = False
+        self.FPhaseWarten = False
+        self.FAlgWarten= False
         
     def Float_Event_Alg_Changed(self,ADummy):      
-        
 
-        if not self.FWarten:# Warten da sonst Schleife der Änderungen
-            self.FWarten = True
-            self.FZ=self.FFloat_Re.value+1j*self.FFloat_Im.value
+
+        if not self.FAlgWarten:# Warten da sonst Schleife der Änderungen
+          
+            self.FPhaseWarten = True             
+            self.FIm = self.FFloat_Im.value
+            self.FRe = self.FFloat_Re.value
+            self.FZ=self.FRe+1j*self.FIm 
             self.FFloat_Phase.value = np.angle(self.FZ,True)
             self.FFloat_Betrag.value =np.absolute(self.FZ)
 
-            self.FIm = self.FFloat_Re.value
-            self.FRe = self.FFloat_Im.value
+            self.FIm = self.FFloat_Im.value
+            self.FRe = self.FFloat_Re.value
             self.FAngle = self.FFloat_Phase.value 
             self.FAngleRad = np.angle(self.FZ,False)        
             self.FAbsolute = self.FFloat_Betrag.value
+            
             Timer(0.1, self.Timer_Event, ()).start()
 
         
     def Float_Event_Polar_Changed (self,ADummy):
-        if not self.FWarten:# Warten da sonst Schleife der Änderungen
-            self.FWarten = True
+
+        if not self.FPhaseWarten:# Warten da sonst Schleife der Änderungen
+            
+            self.FAlgWarten = True
             self.FFloat_Re.value = self.FFloat_Betrag.value * np.cos(np.radians(self.FFloat_Phase.value ))          
             self.FFloat_Im.value = self.FFloat_Betrag.value * np.sin(np.radians(self.FFloat_Phase.value )) 
             
             self.FZ=self.FFloat_Re.value+1j*self.FFloat_Im.value
-            self.FIm = self.FFloat_Re.value
-            self.FRe = self.FFloat_Im.value
+            self.FIm = self.FFloat_Im.value
+            self.FRe = self.FFloat_Re.value
             self.FAngle = self.FFloat_Phase.value 
             self.FAngleRad = np.angle(self.FZ,False)        
             self.FAbsolute = self.FFloat_Betrag.value
+            
             Timer(0.1, self.Timer_Event, ()).start()
 
         
