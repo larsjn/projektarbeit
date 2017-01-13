@@ -129,9 +129,12 @@ class Class_Plot_Menu (object) :
     def btn_Event_show_plot(self,ADummy):
 
         if self.Fsignal.FTyp ==  self.Fsignal.RS_Typ_discrete:
-             if self.Fsignal.FFunction != None:
+            # if self.Fsignal.FFunction != None:
+                
+                self.Fsignal.update()
                 xValues = self.Fsignal.getXList()
-                yValues = self.Fsignal.getYList()
+                yValues = self.Fsignal.getList(xValues)
+
                 markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')  
                 
                 plt.setp(markerline, linewidth=self.FFloat_Markersize.value, color=self.FCol_Marker.value)
@@ -143,7 +146,7 @@ class Class_Plot_Menu (object) :
         elif self.Fsignal.FTyp == self.Fsignal.RS_Typ_continuous:
             return  None           
         elif self.Fsignal.FTyp == self.Fsignal.RS_Typ_complex:
-            if self.Fsignal.FComplex  != None:
+          #  if self.Fsignal.FComplex  != None:
                  Z = self.Fsignal.getZ(True)
                  plt.arrow(0,0, Z.real, Z.imag,linewidth=self.FFloat_Linewidth.value,color=self.FCol_Line.value,
                            head_width=self.FFloat_Markersize.value/2, head_length=self.FFloat_Markersize.value,
@@ -151,9 +154,9 @@ class Class_Plot_Menu (object) :
                  self.Copy_Input()
                  plt.show()
                       
-            return  None
-        else:
-            return  None              
+#            return  None
+#        else:
+#            return  None              
         return None # Default Ausgabe wenn kein If erfüllt wird              
       
         

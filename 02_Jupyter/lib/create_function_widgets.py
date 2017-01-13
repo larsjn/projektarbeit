@@ -493,7 +493,6 @@ class Class_btn_Menu (object) :
 
         if self.FIsDiscret:
             self.disable_btn(None)
-            alterBefehl = self.FBefehl
             self.FBefehl = self.RS_Sin
             self.FFkt=self.RS_Sin
             self.Ftxt_All_Input.value = self.Ftxt_All_Input.value + self.RS_Sin
@@ -707,7 +706,7 @@ class Class_btn_Menu (object) :
 
         self.disable_btn(None)
         self.Enable_left_btn(None)
-
+        self.Fbtn_KlammerZu.disabled  = False
 
         if ADisable_btn_left == True :
             self.disable_btn(None)
@@ -1002,6 +1001,7 @@ class Class_Create_New_Function(object) :
         self.FAcc.children = self.FAccItems
         self.FAcc.selected_index = len(self.FAccItems)-1
         self.FAcc.set_title(1, self.RS_Acc_Titel_Mask)
+        
         self.Fbtn_x_Werte_einfuegen.disabled = True
         self.Fbtn_Weiter_Init.disabled = True
         self.FFloat_Init_Fkt.disabled = True
@@ -1032,7 +1032,7 @@ class Class_Create_New_Function(object) :
 
             InitSubHBoxItems = [self.Fbtn_Weiter_Init, self.Fbtn_x_Werte_einfuegen]
         else:
-            InitSubHBoxItems = [btn_Weiter]
+            InitSubHBoxItems = [self.Fbtn_Weiter_Init]
 
         InitSubHBox = HBox(InitSubHBoxItems)
 
@@ -1060,7 +1060,8 @@ class Class_Create_New_Function(object) :
 
 
         self.Fbtn_Weiter_Create.disabled = True
-        self.FFloat_Abtastfrequenz.disabled = True
+        if self.FIsDiscret: 
+            self.FFloat_Abtastfrequenz.disabled = True
         self.FFloat_Frequenz.disabled = True
         
     # ---------------------------------------------------- End def -----------------------------------------------------
