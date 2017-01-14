@@ -5,6 +5,8 @@ import lib.create_function_widgets as fct
 import lib.create_komplex as kpl
 import operator as op
 import lib.Plot_Widget as sigplt
+import parser
+from math import *
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta): 
@@ -15,16 +17,11 @@ class signal(metaclass=ABCMeta):
         self.RS_Typ_complex     = "complex"
         self.RS_ERROR_Listenlaenge = 'ERROR: Länge der X und Y Listen unterscheiden sich. X-Liste zuerst setzten'
      
-        
         self.FTyp = Atype 
-
         
-        self.FFunction = None
         self.FComplex = None
         
-        
         self.FSignal = None
-        
          
     
     def __add__(self, other):
@@ -49,12 +46,7 @@ class signal(metaclass=ABCMeta):
         
     def getList(self, inList):
   
-        if self.FTyp ==  self.RS_Typ_discrete:
-           # if self.FFunction != None:
-                outList = [self.getYAt(x) for x in inList]
-                return outList
-        elif self.FTyp == self.RS_Typ_continuous:
-
+        if (self.FTyp == self.RS_Typ_discrete) or (self.FTyp == self.RS_Typ_continuous) :
             outList = [self.getYAt(x) for x in inList]
             return outList
         elif self.FTyp == self.RS_Typ_complex:
@@ -121,10 +113,6 @@ class signal(metaclass=ABCMeta):
             return  None              
         return None # Default Ausgabe wenn kein If erfüllt wird        
         
-
-
-        
-        
     def getAbs(self):
         if self.FTyp ==  self.RS_Typ_discrete:
             return  None
@@ -137,8 +125,6 @@ class signal(metaclass=ABCMeta):
         else:
             return  None              
         return None # Default Ausgabe wenn kein If erfüllt wird              
-        
-        
         
     def plot(self, samplingRate = 1, start = 0, end = 100):
         if self.FTyp ==  self.RS_Typ_discrete:
@@ -153,20 +139,8 @@ class signal(metaclass=ABCMeta):
             return  None              
         return None # Default Ausgabe wenn kein If erfüllt wird  
 
- 
-
-        
-
-
     def update(self):
         pass
-        
-        
-        
-        
-        
-        
-        
 
 
 # Basis-Klasse für kontinuierliche Signale
@@ -182,6 +156,14 @@ class discrete(signal):
 
 # Basis-Klasse für Rechenoperationen (?)
 
+# Nutzereingabe Parsen
+class parseFkt(signal):
+    def __init__(self, formula):
+        self.function = parser.expr(formula).compile()
+
+    def getYAt(self, time):
+        t = time
+return eval(self.function)
 
 # Eine Signal per Bildungsvorschrift erzeugen
 class create(signal):
@@ -289,7 +271,8 @@ class create(signal):
  #           self.update()
   #          return self.FyList
         
-        
+class parseFkt(signal):
+    def 
         
 # Kontinuierliche Signale
 class sine(contiuous):
@@ -428,11 +411,7 @@ class add(signal):
     def update(self):         
         self.FsigA.update()
         self.FsigB.update()         
-
-        
-        
        
-
     def __str__(self):
         return self.FsigA.__str__() + "+" + self.FsigB.__str__()
 
