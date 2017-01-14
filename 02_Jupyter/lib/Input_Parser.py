@@ -1,8 +1,6 @@
 
 # coding: utf-8
 
-# In[34]:
-
 from IPython.display import display
 from IPython.display import clear_output
 
@@ -11,9 +9,7 @@ from ipywidgets import Layout
 from ipywidgets import Text
 
 
-# In[33]:
-
-class Class_Input_Paser(object):
+class Class_Input_Parser(object):
     def __init__(self):
         self.RS_Titel = 'Funktionseingabe'
        
@@ -25,23 +21,14 @@ class Class_Input_Paser(object):
         self.FAccItems = [self.Ftxt_Input]
         self.FAcc =  Accordion(children=self.FAccItems) 
         
-        
         self.create()
-    
     
     def txt_Event_Eingabe (self,ADummy):
         self.FInput = self.Ftxt_Input.value       
-        
-        
     
     def create(self):
         self.Ftxt_Input.observe(self.txt_Event_Eingabe)
         
         self.FAcc.set_title(0, self.RS_Titel)
         display(self.FAcc)  
-
-
-# In[ ]:
-
-
 

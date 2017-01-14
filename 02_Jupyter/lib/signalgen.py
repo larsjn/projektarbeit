@@ -7,6 +7,7 @@ import operator as op
 import lib.Plot_Widget as sigplt
 import parser
 from math import *
+import lib.Input_Parser as inp
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta): 
@@ -160,41 +161,35 @@ class discrete(signal):
 class parseFkt(signal):
     def __init__(self, formula):
         self.function = parser.expr(formula).compile()
+        
+        super().__init__(None)
+        self.FTyp = self.RS_Typ_continuous
 
     def getYAt(self, time):
         t = time
-return eval(self.function)
+        return eval(self.function)
 
 # Eine Signal per Bildungsvorschrift erzeugen
 class create(signal):
     def __init__ (self, Atype): 
 
+        super().__init__(Atype) 
 
-        super().__init__(Atype)  
-
+        self.input = None
                  
-        if Atype == self.RS_Typ_discrete :
-            self.FComplex = None
-            self.FisDiscrete = True
-            self.FFunction = fct.Class_Create_New_Function(self.FisDiscrete)
-            self.FFunction.Create(None)
-            
-        elif Atype ==  self.RS_Typ_continuous:
+        if Atype == self.RS_Typ_continuous:
             self.FComplex = None
             self.FisDiscrete = False
-            self.FFunction = fct.Class_Create_New_Function(self.FisDiscrete)
-            self.FFunction.Create(None)
+            self.FFunction = inp.Class_Input_Parser()
             
-        elif Atype ==  self.RS_Typ_complex:
+        elif Atype == self.RS_Typ_complex:
             self.FFunction = None
-            self.FComplex = kpl.create_complex()               
+            self.FComplex = kpl.create_complex() 
         else:
-            print("Mögliche Parameter:"+ self.RS_Typ_discrete+","+self.RS_Typ_continuous+","+self.RS_Typ_complex)            
+            print("Mögliche Parameter:"+ self.RS_Typ_discrete+","+self.RS_Typ_continuous+","+self.RS_Typ_complex)
 
-   
         self.FxList = None
         self.FyList = None
-  
             
     def delete_Values(self):        
         if self.FTyp ==  self.RS_Typ_discrete:
@@ -226,13 +221,18 @@ class create(signal):
                     out = None
                 return out        
         elif self.FTyp == self.RS_Typ_continuous:
-
-            return self.FFunction.FResultSignal.getYAt(Ax)
+            if self.FFunction.FInput != self.input:
+                self.parsedFktn = parseFkt(self.FFunction.FInput)
+                self.input = self.FFunction.FInput
+                return self.parsedFktn.getYAt(Ax)
+            else:
+                return self.parsedFktn.getYAt(Ax)
         elif self.FTyp == self.RS_Typ_complex:
             return None
         else:
             return None               
         return None # Default Ausgabe wenn kein If erfüllt wird      
+    
     def __str__(self):
         if self.FTyp == self.RS_Typ_discrete:
             return self.FFunction.FResultSignal.__str__()
@@ -240,7 +240,6 @@ class create(signal):
             print("Signal ist nicht kontinuierlich")
         return None # Default Ausgabe wenn kein If erfüllt wird  
         
-
     def update(self):
         if self.FTyp ==  self.RS_Typ_discrete:
             if self.FFunction != None:           
@@ -358,6 +357,18 @@ class const(contiuous):
     def __str__(self):
         return str(self.value)
 
+class contToDisc(signal):
+    def __init__(self, signal, samplingRate=100, start=0, end=10):
+        self.xList = np.arange(start, end, 1 / samplingRate)
+        self.yList = signal.getList(self.xList)
+
+    def getXList(self):
+        return self.xList
+
+    def getYList(self):
+        return self.yList
+
+
 
 # Rechenoperationen
 class add(signal):
@@ -380,8 +391,8 @@ class add(signal):
         
         if self.FsigA.FTyp == self.FsigB.FTyp:
             if self.FTyp ==  self.RS_Typ_discrete:                
-                if (self.FsigA.getYAt(Atime)  != None) and (self.FsigB.getYAt(Atime)!= None) :                     
-                        return np.add(self.FsigA.getYAt(Atime),self.FsigB.getYAt(Atime)).tolist()
+                if (self.FsigA.getYAt(Atime)  != None) and (self.FsigB.getYAt(Atime) != None) :                     
+                        return np.add(self.FsigA.getYAt(Atime),self.FsigB.getYAt(Atime))
                 return None
             elif self.FTyp == self.RS_Typ_continuous:   
                 return  self.FsigA.getYAt(Atime) + self.FsigB.getYAt(Atime)         
@@ -397,7 +408,7 @@ class add(signal):
         
     def getXList(self):
         if self.FsigA.FTyp == self.FsigB.FTyp:
-            if self.FTyp ==  self.RS_Typ_discrete: 
+            if self.FTyp == self.RS_Typ_discrete: 
                 xA = self.FsigA.getXList()
                 xB = self.FsigB.getXList()
                 
@@ -405,7 +416,8 @@ class add(signal):
                     return xA
                 else: 
                     print('ERROR: X-Listen unterscheiden sich')
-        return  None   
+        return  None
+
     def update(self):         
         self.FsigA.update()
         self.FsigB.update()         
