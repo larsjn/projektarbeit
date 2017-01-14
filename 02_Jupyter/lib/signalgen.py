@@ -1,8 +1,10 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
-#import lib.Create_Function_Widgetsas fct
+import lib.create_function_widgets as fct
 import operator as op
+import parser
+from math import *
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
@@ -25,71 +27,96 @@ class signal(metaclass=ABCMeta):
 
 # Basis-Klasse für kontinuierliche Signale
 class contiuous(signal):
-    def _type(self):
-        return self.__class__.__name__
-
+    # Gibt den y-Wert für einen gegebenen x-Wert zurück
     @abstractmethod
     def getYAt(self, x):
         pass
 
 # Basis-Klasse für diskrete Signale
 class discrete(signal):
-    def _type(self):
-        return self.__class__.__name__
+    pass
 
 # Basis-Klasse für Rechenoperationen (?)
 
+# Nutzereingabe Parsen
+class parseFkt(signal):
+    def __init__(self, formula):
+        self.function = parser.expr(formula).compile()
+
+    def getYAt(self, time):
+        t = time
+        return eval(self.function)
 
 
-# Ich weiß jetzt nicht genau wie du das haben willst habe ein Bsp in der Demo gepack wie du an die werte kommen würdest
+# Eine Signal per Bildungsvorschrift erzeugen
+class create(signal):
+    def __init__ (self, type):
+        if type == "discrete":
+            self.isDiscrete = True
+        elif type == "continuous":
+            self.isDiscrete = False
+        else:
+            print("Mögliche Parameter: discrete, continuous")
+            return None
 
+        self.function = fct.Class_Create_New_Function(self.isDiscrete)
+        self.function.Create(None)
 
+    def delete_Values(self):
+        if self.function != None:
+            del self.function
+            self.function = None
 
-#class create(signal):
-#    def __init__ (self):
-#        self.FFunction = None
-#        self.FFunction = fct.Class_Create_New_Function()
-#        h=self.FFunction.Create(None)
-#
-#    def delete_Values(self):
-#        if self.FFunction != None:
-#            del self.FFunction
-#            self.FFunction = None
-#    def getXnparray(self):
-#        if self.FFunction != None:
-#            return self.FFunction.FxWerte
-#
-#    def getYnparray(self):
-#        if self.FFunction != None:
-#            return self.FFunction.FyWerte
-#
-#    def getXList(self):
-#        if self.FFunction != None:
-#            return self.FFunction.FxWerte.tolist()
-#    
-#    def getYList(self):
-#        if self.FFunction != None:
-#            return self.FFunction.FyWerte.tolist()
-#
-#    def getYAt(self,Ax):
-#        try:
-#            xList = self.FFunction.FxWerte.tolist()
-#            i = xList.index(Ax)
-#            yList = self.FFunction.FyWerte.tolist()
-#            out = yList[i]
-#        except ValueError:
-#            out = None
-#        return out
+    def getXnparray(self):
+        if self.function != None:
+            return self.function.FxWerte
 
-#    def getList(self, inList):
-#        outList = [self.getYAt(x) for x in inList]
-#        return outList
+    def getYnparray(self):
+        if self.function != None:
+            return self.function.FyWerte
+
+    def getXList(self):
+        if self.function != None:
+            return self.function.FxWerte.tolist()
+
+    def getYList(self):
+        if self.function != None:
+            return self.function.FyWerte.tolist()
+
+    def getYAt(self, time):
+        if self.isDiscrete == False:
+            return self.function.FResultSignal.getYAt(time)
+
+        else:
+            print("Signal ist nicht kontinuierlich")
+            return None
+        # try:
+        #     xList = self.function.FxWerte.tolist()
+        #     i = xList.index(Ax)
+        #     yList = self.function.FyWerte.tolist()
+        #     out = yList[i]
+        # except ValueError:
+        #     out = None
+        # return out
+
+    def getList(self, inList):
+        outList = [self.getYAt(x) for x in inList]
+        return outList
+
+    def __str__(self):
+        if self.isDiscrete == False:
+            return self.function.FResultSignal.__str__()
+
+        else:
+            print("Signal ist nicht kontinuierlich")
+            return None
 
 # Kontinuierliche Signale
 class sine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):
-        self.frequency = frequency
-        self.amplitude = amplitude
+        self.frequency = float(frequency)
+        self.amplitude = float(amplitude)
+        self.type = "contiuous"
 
     def getYAt(self, time):
         return self.amplitude * np.sin(2 * np.pi * self.frequency * time)
@@ -104,20 +131,26 @@ class sine(contiuous):
         self.frequency = self.sfreq.val
         self.amplitude = self.samp.val
 
+    def __str__(self):
+        return "{0}*sin(2*PI*{1}*t)".format(self.amplitude, self.frequency)
 
 class cosine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):
-        self.frequency = frequency
-        self.amplitude = amplitude
+        self.frequency = float(frequency)
+        self.amplitude = float(amplitude)
+        self.type = "contiuous"
 
     def getYAt(self, time):
-        return self.amplitude * np.cos(2 * np.pi * self.frequency * time)
+        return self.amplitude * np.cos(2.0 * np.pi * self.frequency * time)
 
     def setFreq(self, frequency):
         self.frequency = frequency
 
     def setAmp(self, amplitude):
         self.amplitude = amplitude
+
+    def __str__(self):
+        return "{0}*cos(2*PI*{1}*t)".format(self.amplitude, self.frequency)
 
 
 class square(contiuous):
@@ -126,6 +159,7 @@ class square(contiuous):
         self.amplitude = amplitude
         self.dutyCycle = dutyCycle
         self.update()
+        self.type = "contiuous"
 
     def getYAt(self, time):
         if((time % self.time) < self.onTime):
@@ -151,13 +185,17 @@ class square(contiuous):
 
 class const(contiuous):
     def __init__(self, value):
-        self._value = value
+        self.value = value
+        self.type = "contiuous"
 
     def getYAt(self, x):
-        return self._value
+        return self.value
 
     def setValue(self, value):
         self._value = value
+
+    def __str__(self):
+        return str(self.value)
 
 
 # Rechenoperationen
@@ -175,6 +213,9 @@ class add(signal):
     def getYAt(self, time):
         return self.sigA.getYAt(time) + self.sigB.getYAt(time)
 
+    def __str__(self):
+        return self.sigA.__str__() + "+" + self.sigB.__str__()
+
 
 class sub(signal):
     def __init__(self, signalA, signalB):
@@ -189,6 +230,9 @@ class sub(signal):
 
     def getYAt(self, time):
         return self.sigA.getYAt(time) - self.sigB.getYAt(time)
+
+    def __str__(self):
+        return self.sigA.__str__() + "-" + self.sigB.__str__()
 
 
 class mul(signal):
@@ -205,6 +249,9 @@ class mul(signal):
     def getYAt(self, time):
         return self.sigA.getYAt(time) * self.sigB.getYAt(time)
 
+    def __str__(self):
+        return self.sigA.__str__() + "*" + self.sigB.__str__()
+
 
 class div(signal):
     def __init__(self, signalA, signalB):
@@ -219,6 +266,9 @@ class div(signal):
 
     def getYAt(self, time):
         return self.sigA.getYAt(time) / self.sigB.getYAt(time)
+
+    def __str__(self):
+        return self.sigA.__str__() + "/" + self.sigB.__str__()
 
 # Verschiebung
 class shift(signal):
@@ -243,6 +293,7 @@ class convolve(discrete):
         self.samplingRate = samplRate
         self.start = start
         self.end = end
+        self.type = "discrete"
 
     def getYAt(self, time):
 
