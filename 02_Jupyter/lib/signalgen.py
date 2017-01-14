@@ -9,6 +9,7 @@ import parser
 from math import *
 import lib.Input_Parser as inp
 
+
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta): 
     
@@ -21,7 +22,6 @@ class signal(metaclass=ABCMeta):
         self.FTyp = Atype 
         
         self.FComplex = None
-        
         self.FSignal = None
          
     
