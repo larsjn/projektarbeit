@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import lib.create_function_widgets as fct
 import operator as op
 import parser
-from math import sin, cos
+from math import *
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
