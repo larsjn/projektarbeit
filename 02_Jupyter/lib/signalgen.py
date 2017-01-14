@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
-import lib.create_function_widgets as fct
+#import lib.create_function_widgets as fct
 import lib.create_komplex as kpl
 import operator as op
 import lib.Plot_Widget as sigplt
@@ -22,6 +22,7 @@ class signal(metaclass=ABCMeta):
         self.FTyp = Atype 
         
         self.FComplex = None
+        self.FComplex
         self.FSignal = None
          
     
@@ -127,7 +128,7 @@ class signal(metaclass=ABCMeta):
             return  None              
         return None # Default Ausgabe wenn kein If erfüllt wird              
         
-    def plot(self, samplingRate = 1, start = 0, end = 100):
+    def plot(self):
         if self.FTyp ==  self.RS_Typ_discrete:
             sigplt.Class_Plot_Menu(self)                    
             return  None
@@ -401,23 +402,97 @@ class add(signal):
             else:
                 return  None   
         else:
-            print('ERROR: Signaltypen unterscheiden sich')
-            
-            
+            print('ERROR: Signaltypen unterscheiden sich')                 
         return None # Default Ausgabe wenn kein If erfüllt wird   
+#    def getXList(self):
+#        if self.FsigA.FTyp == self.FsigB.FTyp:
+#            if self.FTyp == self.RS_Typ_discrete: 
+#                xA = self.FsigA.getXList()
+#                xB = self.FsigB.getXList()
+#                
+#                if xA == xB and xA != None:
+#                    return xA
+#                else: 
+#                    print('ERROR: X-Listen unterscheiden sich')
+#        return  None        
         
-    def getXList(self):
-        if self.FsigA.FTyp == self.FsigB.FTyp:
-            if self.FTyp == self.RS_Typ_discrete: 
-                xA = self.FsigA.getXList()
-                xB = self.FsigB.getXList()
-                
-                if xA == xB and xA != None:
-                    return xA
-                else: 
-                    print('ERROR: X-Listen unterscheiden sich')
-        return  None
+    def getZ(self,AAsNumpy=False):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+                if not AAsNumpy:
+                    return self.FsigA.getZ() + self.FsigB.getZ()
+                else:
+                    return np.array(self.FsigA.getZ() + self.FsigB.getZ())
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird    
+        
+    def getRe(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+             return self.FsigA.getRe() + self.FsigB.getRe()
 
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird          
+        
+    def getIm(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+              return self.FsigA.getIm() + self.FsigB.getIm()          
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+    def getAngle(self,ADegree = True):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:              
+            return np.angle(self.getZ(),ADegree)       
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird        
+        
+    def getAbs(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            return np.absolute(self.getZ())
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+    def plot(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            sigplt.Class_Plot_Menu(self)                    
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None
+        elif self.FTyp == self.RS_Typ_complex:
+                 # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]   
+            ToPlot = [[0,self.FsigA.getZ()],[self.FsigA.getZ(),self.getZ()],[0,self.getZ()]]            
+            sigplt.Class_Plot_Menu(self,ToPlot,['Signal A','Signal B', 'Signal A+B'])
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird      
+        
+        
+        
+        
     def update(self):         
         self.FsigA.update()
         self.FsigB.update()         
@@ -427,57 +502,279 @@ class add(signal):
 
 
 class sub(signal):
-    def __init__(self, signalA, signalB):
+    def __init__(self, AsignalA, AsignalB):
         super().__init__(AsignalA.FTyp ) 
-        self.sigA = signalA
-        self.sigB = signalB
+        self.FsigA = AsignalA
+        self.FsigB = AsignalB
 
-    def setSigA(self, signalA):
-        self.sigA = signalA
+    def setSigA(self, AsignalA):
+        self.FsigA = AsignalA
 
     def setSigB(self, signalB):
-        self.sigB = signalB
+        self.FsigB = AsignalB
 
-    def getYAt(self, time):
-        return self.sigA.getYAt(time) - self.sigB.getYAt(time)
+    def getYAt(self, Atime):
+        return self.FsigA.getYAt(Atime) - self.FsigB.getYAt(Atime)
+        
+    def getZ(self,AAsNumpy=False):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+                if not AAsNumpy:
+                    return self.FsigA.getZ() - self.FsigB.getZ()
+                else:
+                    return np.array(self.FsigA.getZ() - self.FsigB.getZ())
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird    
+        
+    def getRe(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+             return self.FsigA.getRe() - self.FsigB.getRe()
+
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird          
+        
+    def getIm(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+              return self.FsigA.getIm() - self.FsigB.getIm()          
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+    def getAngle(self,ADegree = True):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:              
+            return np.angle(self.getZ(),ADegree)       
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird        
+        
+    def getAbs(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            return np.absolute(self.getZ())
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+    def plot(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            sigplt.Class_Plot_Menu(self)                    
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None
+        elif self.FTyp == self.RS_Typ_complex:
+                 # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]   
+            ToPlot = [[0,self.FsigA.getZ()],[self.FsigA.getZ(),self.getZ()],[0,self.getZ()]]            
+            sigplt.Class_Plot_Menu(self,ToPlot,['Signal A','Signal B', 'Signal A-B'])
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+
 
     def __str__(self):
         return self.sigA.__str__() + "-" + self.sigB.__str__()
 
 
 class mul(signal):
-    def __init__(self, signalA, signalB):
+    def __init__(self, AsignalA, AsignalB):
         super().__init__(AsignalA.FTyp ) 
-        self.sigA = signalA
-        self.sigB = signalB
+        self.FsigA = AsignalA
+        self.FsigB = AsignalB
 
-    def setSigA(self, signalA):
-        self.sigA = signalA
+    def setSigA(self, AsignalA):
+        self.FsigA = AsignalA
 
-    def setSigB(self, signalB):
-        self.sigB = signalB
+    def setSigB(self, AsignalB):
+        self.FsigB = AsignalB
 
-    def getYAt(self, time):
-        return self.sigA.getYAt(time) * self.sigB.getYAt(time)
+    def getYAt(self, Atime):
+        return self.FsigA.getYAt(Atime) * self.FsigB.getYAt(Atime)
+        
+    def getZ(self,AAsNumpy=False):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+                if not AAsNumpy:
+                    return self.FsigA.getZ() * self.FsigB.getZ()
+                else:
+                    return np.array(self.FsigA.getZ() * self.FsigB.getZ())
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird    
+        
+    def getRe(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            return self.getZ().real
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird          
+        
+    def getIm(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+             return self.getZ().imag          
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+    def getAngle(self,ADegree = True):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:              
+            return np.angle(self.getZ(),ADegree)       
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird        
+        
+    def getAbs(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            return np.absolute(self.getZ())
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+    def plot(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            sigplt.Class_Plot_Menu(self)                    
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None
+        elif self.FTyp == self.RS_Typ_complex:
+                 # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]   
+            ToPlot = [[0,self.FsigA.getZ()],[0,self.FsigB.getZ()],[0,self.getZ()]]            
+            sigplt.Class_Plot_Menu(self,ToPlot,['Signal A','Signal B', 'Signal A*B'])
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird  
 
     def __str__(self):
         return self.sigA.__str__() + "*" + self.sigB.__str__()
 
 
 class div(signal):
-    def __init__(self, signalA, signalB):
+    def __init__(self, AsignalA, AsignalB):
         super().__init__(AsignalA.FTyp ) 
-        self.sigA = signalA
-        self.sigB = signalB
+        self.FsigA = AsignalA
+        self.FsigB = AsignalB
 
-    def setSigA(self, signalA):
-        self.sigA = signalA
+    def setSigA(self, AsignalA):
+        self.FsigA = AsignalA
 
-    def setSigB(self, signalB):
-        self.sigB = signalB
+    def setSigB(self, AsignalB):
+        self.FsigB = AsignalB
 
-    def getYAt(self, time):
-        return self.sigA.getYAt(time) / self.sigB.getYAt(time)
+    def getYAt(self, Atime):
+        return self.FsigA.getYAt(Atime) / self.FsigB.getYAt(Atime)
+        
+    def getZ(self,AAsNumpy=False):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+                if not AAsNumpy:
+                    return self.FsigA.getZ() / self.FsigB.getZ()
+                else:
+                    return np.array(self.FsigA.getZ() / self.FsigB.getZ())
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird    
+        
+    def getRe(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            return self.getZ().real
+
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird          
+        
+    def getIm(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            return self.getZ().imag          
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+    def getAngle(self,ADegree = True):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:              
+            return np.angle(self.getZ(),ADegree)       
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird        
+        
+    def getAbs(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None           
+        elif self.FTyp == self.RS_Typ_complex:
+            return np.absolute(self.getZ())
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird              
+      
+    def plot(self):
+        if self.FTyp ==  self.RS_Typ_discrete:
+            sigplt.Class_Plot_Menu(self)                    
+            return  None
+        elif self.FTyp == self.RS_Typ_continuous:
+            return  None
+        elif self.FTyp == self.RS_Typ_complex:
+                 # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]   
+            ToPlot = [[0,self.FsigA.getZ()],[0,self.FsigB.getZ()],[0,self.getZ()]]            
+            sigplt.Class_Plot_Menu(self,ToPlot,['Signal A','Signal B', 'Signal A/B'])
+            return  None
+        else:
+            return  None              
+        return None # Default Ausgabe wenn kein If erfüllt wird  
 
     def __str__(self):
         return self.sigA.__str__() + "/" + self.sigB.__str__()
