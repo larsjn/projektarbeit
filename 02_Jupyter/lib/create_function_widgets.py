@@ -13,7 +13,7 @@ from ipywidgets import HBox
 from ipywidgets import Button
 from ipywidgets import Text
 
-from ipywidgets import Dropdown
+#from ipywidgets import Dropdown
 
 from ipywidgets import FloatText
 from ipywidgets import Tab
@@ -188,7 +188,7 @@ class Class_btn_Menu (object) :
                 print('Fenster Nr: ' + self.FSubCount +':' +'Debug: ' + 'Sub: InputA: ' + str(self.FInputA) + ' InputB: ' + str(self.FInputB) )
             if self.FIsSub:
                 if self.FIsDiscret:
-                    self.FSubCurrentValue = np.sub(self.FInputA,self.FInputB)
+                    self.FSubCurrentValue = np.subtract(self.FInputA,self.FInputB)
                 else:
                     del self.FSubCurrentSignal
                     self.FSubCurrentSignal = sig.sub(self.FInputA,self.FInputB)
@@ -201,7 +201,7 @@ class Class_btn_Menu (object) :
                     print('Fenster Nr: ' + self.FSubCount +':' +'Debug: ' + 'SubCurrentValue: ' + str(self.FSubCurrentSignal))
             else:
                 if self.FIsDiscret:
-                    self.FCurrentValue = np.sub(self.FInputA,self.FInputB)
+                    self.FCurrentValue = np.subtract(self.FInputA,self.FInputB)
                 else:
                     del self.FCurrentSignal
                     self.FCurrentSignal = sig.sub(self.FInputA,self.FInputB)
@@ -217,11 +217,11 @@ class Class_btn_Menu (object) :
 
         if self.FBefehl == self.RS_Mul :
             if self.FEnableDebugPrint:
-                print('Fenster Nr: ' + self.FSubCount +':' +'Debug: Case Mul')
+                print('Fenster Nr: ' + self.FSubCount +':' +'Debug: Case mul')
                 print('Fenster Nr: ' + self.FSubCount +':' +'Debug: ' + 'Sub: InputA: ' + str(self.FInputA) + ' InputB: ' + str(self.FInputB) )
             if self.FIsSub:
                 if self.FIsDiscret:
-                    self.FSubCurrenValue = np.multiply(self.FInputA,self.FInputB)
+                    self.FSubCurrentValue = np.multiply(self.FInputA,self.FInputB)
                 else:
                     del self.FSubCurrentSignal
                     self.FSubCurrentSignal = sig.mul(self.FInputA,self.FInputB)
@@ -234,7 +234,7 @@ class Class_btn_Menu (object) :
                     print('Fenster Nr: ' + self.FSubCount +':' +'Debug: ' + 'SubCurrentValue: ' + str(self.FSubCurrentSignal))
             else:
                 if self.FIsDiscret:
-                    self.FCurrentValue= np.multiply(self.FInputA,self.FInputB)
+                    self.FCurrentValue = np. multiply(self.FInputA,self.FInputB)
                 else:
                     del self.FCurrentSignal
                     self.FCurrentSignal = sig.mul(self.FInputA,self.FInputB)
@@ -265,7 +265,7 @@ class Class_btn_Menu (object) :
                     print('Fenster Nr: ' + self.FSubCount +':' +'Debug: ' + 'SubCurrentValue: ' + str(self.FSubCurrentSignal))
             else:
                 if self.FIsDiscret:
-                    self.FCurrentValue = np.mdivide(self.FInputA,self.FInputB)
+                    self.FCurrentValue = np.divide(self.FInputA,self.FInputB)
                 else:
                     del self.FCurrentSignal
                     self.FCurrentSignal = sig.div(self.FInputA,self.FInputB)
@@ -493,7 +493,6 @@ class Class_btn_Menu (object) :
 
         if self.FIsDiscret:
             self.disable_btn(None)
-            alterBefehl = self.FBefehl
             self.FBefehl = self.RS_Sin
             self.FFkt=self.RS_Sin
             self.Ftxt_All_Input.value = self.Ftxt_All_Input.value + self.RS_Sin
@@ -515,7 +514,7 @@ class Class_btn_Menu (object) :
 
         if self.FIsDiscret:
             self.disable_btn(None)
-            alterBefehl = self.FBefehl
+   #         alterBefehl = self.FBefehl
             self.FBefehl = self.RS_Cos
             self.FFkt=self.RS_Cos
             self.Ftxt_All_Input.value = self.Ftxt_All_Input.value + self.RS_Cos
@@ -538,7 +537,7 @@ class Class_btn_Menu (object) :
         if self.FEnableDebugPrint:
             print('Fenster Nr: ' + self.FSubCount +':' +'Debug: ' + self.RS_Klammer_auf)
         self.Ftxt_All_Input.value = self.Ftxt_All_Input.value + self.RS_Klammer_auf
-        alterBefehl = self.FBefehl
+      #  alterBefehl = self.FBefehl
         self.FBefehl = self.RS_Klammer_auf
         self.disable_btn(None)
         self.FFkt=self.RS_Klammer_auf
@@ -707,7 +706,7 @@ class Class_btn_Menu (object) :
 
         self.disable_btn(None)
         self.Enable_left_btn(None)
-
+        self.Fbtn_KlammerZu.disabled  = False
 
         if ADisable_btn_left == True :
             self.disable_btn(None)
@@ -724,28 +723,28 @@ class Class_btn_Menu (object) :
         else:
             btn_const =  [self.Fbtn_Frequenz_Einfuegen,self.Fbtn_Pi_Einfuegen]
 
+        itm_rechts = [ self.Ftxt_Num, self.Fbtn_Eingeben]
+
+      #  btn_SubHBox1 = HBox(children=[])
+
+      #  btn_SubHBox2 = HBox(children=[ self.Fbtn_Eingeben])
+        
 
 
-        btn_SubHBox1 = HBox(children=[self.Ftxt_Num])
-
-        btn_SubHBox2 = HBox(children=[ self.Fbtn_Eingeben, self.Fbtn_KlammerZu])
-
-
-        itm_rechts = [ btn_SubHBox1, btn_SubHBox2]
+        
         btn_VBoxr = VBox(children=btn_rechts)
         btn_VBoxl = VBox(children=btn_links)
         btn_VBoxconst = VBox(children=btn_const)
         itm_VBoxr = VBox(children=itm_rechts)
 
 
-        HBoxItems = [ btn_VBoxl,btn_VBoxr, btn_VBoxconst,itm_VBoxr ]
+        HBoxItems = [ btn_VBoxl,btn_VBoxr, btn_VBoxconst,itm_VBoxr,self.Fbtn_KlammerZu ]
         btn_HBox = HBox(children=HBoxItems)
 
         if self.FEnableDebugPrint:
             print('Fenster Nr: ' + self.FSubCount +':' +"Debug: btn_Tab")
 
-        print(('Hinweis: Leider ist es relativ kompliziert auch "Punkt vor Strich" zu beachten.',
-               'Daher einfach Punktrechnungen in Klammern setzen'))
+
 
         return btn_HBox
 
@@ -801,6 +800,8 @@ class Class_Create_New_Function(object) :
         self.RS_Dpd_Cos = 'Cos('
         self.RS_Dpd_Klammer_auf = '('
         self.RS_Dpd_Klammer_zu =')'
+        self.RS_x_Min = 'x Minimum'
+        self.RS_x_Max = 'x Maximum'
         # ====================================== Definition "def" übergreifende Variablen ======================================
         self.FIsDiscret = AIsDiscret
         self.FMaskResultIteams = None
@@ -827,6 +828,11 @@ class Class_Create_New_Function(object) :
         self.FFloat_Abtastfrequenz =FloatText(layout=self.F_wdg_Layout,value=10, disabled=False)
 
         self.FFloat_Frequenz =FloatText(layout=self.F_wdg_Layout,value=10, disabled=False)
+        
+        
+        self.FFloat_x_Min = FloatText(layout=self.F_wdg_Layout,value=-10, disabled=False,  )
+       
+        self.FFloat_x_Max = FloatText(layout=self.F_wdg_Layout,value=10, disabled=False)
 
         self.Ftxt_All_Input = Text(layout=self.F_wdg_Layout, value='Eingegebene Formel', disabled=True)
 
@@ -835,7 +841,14 @@ class Class_Create_New_Function(object) :
         self.FFloat_Init_Fkt = FloatText(Layout=self.F_wdg_Layout,value=1, description=self.RS_Zahl, disabled=False)
 
         self.FTabItems = []
+
         self.FTab = None
+        
+        self.Fbtn_Weiter_Create = Button(layout=self.F_wdg_Layout,button_style='warning',description=self.RS_Btn_Eingabemaske_erzeugen)
+       
+        self.Fbtn_Weiter_Init =  Button(layout=self.F_wdg_Layout,button_style='warning',description=self.RS_Btn_Weiter)
+     
+        self.Fbtn_x_Werte_einfuegen = Button(layout=self.F_wdg_Layout,button_style='warning',description=self.RS_Btn_Use_x_Values)
         # ====================================== Widget Modul Namen ======================================
 
 
@@ -910,14 +923,14 @@ class Class_Create_New_Function(object) :
             if self.FListClass_btn_Menu[0].FFkt == None:
                 self.FCurrentValue = self.FListClass_btn_Menu[0].FCurrentValue
 
-
+         #   print('self.FListClass_btn_Menu[0].FFkt             ' + str(self.FListClass_btn_Menu[0].FFkt))
+         #   print('self.FListClass_btn_Menu[0].FCurrentValue    ' + str(self.FListClass_btn_Menu[0].FCurrentValue))
+         #   print('self.FListClass_btn_Menu[0].FSubCurrentValue ' + str(self.FListClass_btn_Menu[0].FSubCurrentValue))
+         #   print('self.FCurrentValue                           ' + str(self.FCurrentValue))
+         #   print('self.FSubCurrentValue                        ' + str(self.FSubCurrentValue))
+            
             if isinstance(self.FCurrentValue , float) :
-                 self.FCurrentValue = [self.FCurrentValue for i in range(len(self.FxWerte))]
-#                 yconst=  self.FCurrentValue
-#                 self.FCurrentValue = [ yconst]
-#                 for x in range(0, len(self.FxWerte)):
-#                     self.FCurrentValue = self.FCurrentValue + [ yconst]
-
+                self.FCurrentValue = [self.FCurrentValue for i in range(len(self.FxWerte))]
 
             self.FyWerte = self.FCurrentValue
 
@@ -927,10 +940,9 @@ class Class_Create_New_Function(object) :
             if self.FListClass_btn_Menu[0].FFkt == None:
                 self.FCurrentSignal = self.FListClass_btn_Menu[0].FCurrentSignal
             self.FResultSignal = self.FCurrentSignal
-#             print(self.FResultSignal)
-#             print(str(self.FResultSignal.getYAt(5)))
 
-        self.FAcc.visible = False  # Leider ist es nicht möglich das widget "ordentlich" zu löschen,
+        self.FTab.visible = False
+        #self.FAcc.visible = False  # Leider ist es nicht möglich das widget "ordentlich" zu löschen,
                                     # daher nur unsichtbar gemacht
                                     # löschen ist aber "per Hand" mit dem klein x links neben den wdg möglich
 
@@ -980,12 +992,22 @@ class Class_Create_New_Function(object) :
         form_fkt_mask = Box(form_fkt_mask_items , layout=self.F_wdg_Box_Layout)
         self.FMaskResultIteams = form_fkt_mask_items
         self.FMaskResultForm = form_fkt_mask
-        if len(self.FAccItems) > 2:
-            self.FAccItems[2].close
-            self.FAccItems.pop(2)
+
+        if len(self.FAccItems) > 1:
+            self.FAccItems[1].close
+            self.FAccItems.pop(1)
+
         self.FAccItems = self.FAccItems + [ form_fkt_mask ]
         self.FAcc.children = self.FAccItems
         self.FAcc.selected_index = len(self.FAccItems)-1
+        self.FAcc.set_title(1, self.RS_Acc_Titel_Mask)
+        
+        self.Fbtn_x_Werte_einfuegen.disabled = True
+        self.Fbtn_Weiter_Init.disabled = True
+        self.FFloat_Init_Fkt.disabled = True
+
+        print(('Hinweis: Leider ist es relativ kompliziert auch "Punkt vor Strich" zu beachten.'
+               'Daher einfach Punktrechnungen in Klammern setzen'))
 # ---------------------------------------------------- End def -----------------------------------------------------
     def Btn_Event_x_Werte_einfuegen(self,ADummy):
         if self.FIsDiscret:
@@ -996,17 +1018,21 @@ class Class_Create_New_Function(object) :
         if self.FEnableDebugPrint:
             print('Debug: Init Input Fkt')
 
-        btn_Weiter =  Button(layout=self.F_wdg_Layout,button_style='warning',description=self.RS_Btn_Weiter)
-        btn_Weiter.on_click(self.Btn_Event_Create_fkt_mask)
+        
+        self.Fbtn_Weiter_Init.on_click(self.Btn_Event_Create_fkt_mask)
         self.FFrequenz = self.FFloat_Frequenz.value
         if self.FIsDiscret:
-            btn_x_Werte_einfuegen = Button(layout=self.F_wdg_Layout,button_style='warning',description=self.RS_Btn_Use_x_Values)
-            btn_x_Werte_einfuegen.on_click(self.Btn_Event_x_Werte_einfuegen)
+            
+            self.Fbtn_x_Werte_einfuegen.on_click(self.Btn_Event_x_Werte_einfuegen)
             fs = self.FFloat_Abtastfrequenz.value
-            self.FxWerte = np.arange(-10,10+1/fs,1/fs)
-            InitSubHBoxItems = [btn_Weiter,btn_x_Werte_einfuegen]
+            
+            
+            if self.FIsDiscret:                        
+                self.FxWerte = np.arange(self.FFloat_x_Min.value,self.FFloat_x_Max.value+1/fs,1/fs)
+
+            InitSubHBoxItems = [self.Fbtn_Weiter_Init, self.Fbtn_x_Werte_einfuegen]
         else:
-            InitSubHBoxItems = [btn_Weiter]
+            InitSubHBoxItems = [self.Fbtn_Weiter_Init]
 
         InitSubHBox = HBox(InitSubHBoxItems)
 
@@ -1026,19 +1052,27 @@ class Class_Create_New_Function(object) :
         if len(self.FAccItems) > 1:
             self.FAccItems[1].close
             self.FAccItems.pop(1)
+            
 
         self.FAccItems = [self.FAccItems[0]] + [ InitHBox ]
         self.FAcc.children = self.FAccItems
         self.FAcc.selected_index = len(self.FAccItems)-1
-# ---------------------------------------------------- End def -----------------------------------------------------
+
+
+        self.Fbtn_Weiter_Create.disabled = True
+        if self.FIsDiscret: 
+            self.FFloat_Abtastfrequenz.disabled = True
+        self.FFloat_Frequenz.disabled = True
+        
+    # ---------------------------------------------------- End def -----------------------------------------------------
 
 
 
     def Create(self,AIsDiscrete): # Erstellt die Eingabemöglichkeit für die Anzahl der SubFunktionen
 
         # Butten um zum nächsten "Tab" zu gehen und Eingaben zu übernehemen
-        btn_weiter = Button(layout=self.F_wdg_Layout,button_style='warning',description=self.RS_Btn_Eingabemaske_erzeugen)
-        btn_weiter.on_click(self.Btn_Event_Init_Input_Fkt)
+        
+        self.Fbtn_Weiter_Create.on_click(self.Btn_Event_Init_Input_Fkt)
 
         # Liste der Eingabe-Widgets, wenn diskret zusätzlich Abtastfrequenz eingeben
         if self.FIsDiscret:
@@ -1051,7 +1085,13 @@ class Class_Create_New_Function(object) :
                 #                 Dropdown(options=[self.RS_Dpd_Reelle_Funktion, '', ''],value=self.RS_Dpd_Reelle_Funktion,description=self.RS_Funktion,disabled=False,
                 #                          button_style='' # 'success', 'info', 'warning', 'danger' or ''
                 #                         ),
-                                 btn_weiter
+                
+                                           
+                                 Text(layout=self.F_wdg_Layout, value=self.RS_x_Min, disabled=True, visible = True)  ,        
+                                 self.FFloat_x_Min,
+                                 Text(layout=self.F_wdg_Layout, value=self.RS_x_Max, disabled=True, visible = True)  , 
+                                 self.FFloat_x_Max,
+                                 self.Fbtn_Weiter_Create
                             ]
         else:
             Box_Fkt_Items = [    Text(layout=self.F_wdg_Layout, value=self.RS_Frequenz, disabled=True, visible = True),
@@ -1060,7 +1100,7 @@ class Class_Create_New_Function(object) :
                 #                 Dropdown(options=[self.RS_Dpd_Reelle_Funktion, '', ''],value=self.RS_Dpd_Reelle_Funktion,description=self.RS_Funktion,disabled=False,
                 #                          button_style='' # 'success', 'info', 'warning', 'danger' or ''
                 #                         ),
-                                 btn_weiter
+                                 self.Fbtn_Weiter_Create
                             ]
             self.FFloat_Abtastfrequenz = None
 
@@ -1073,8 +1113,8 @@ class Class_Create_New_Function(object) :
         self.FAcc = Accordion(children=self.FAccItems)
         self.FAcc.set_title(0, self.RS_Acc_Titel_Setup)
         self.FAcc.set_title(1, 'Eingabe Startwert')
-        self.FAcc.set_title(2, self.RS_Acc_Titel_Mask)
-        self.FAcc.set_title(3, 'Plot')
+
+
         display(self.FAcc)
         #return self.RS_Help_Setup_Funktion
 # ---------------------------------------------------- End def -----------------------------------------------------

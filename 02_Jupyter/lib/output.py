@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
-import lib.signalgen
+from . import signalgen as sig
 
 class diagram:
     def __init__(self, inputSig, samplingRate = 1, start = 0, end = 100):
@@ -16,15 +16,27 @@ class diagram:
         self.plot()
 
     def plot(self):
-        intv = 1 / self.samplingRate
-        self.XVals = np.arange(self.start, self.end, intv)
-        self.YVals = self.signal.getList(self.XVals)
-        #print(self.XVals)
-        #print(self.YVals)
-        plt.plot(self.XVals, self.YVals)
-        plt.xlabel("Zeit")
-        plt.ylabel("Amplitude")
-        plt.show()
+
+        if self.signal.FisDiscrete:
+            xValues = self.signal.getXList()
+            yValues = self.signal.getYList()
+            markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')
+            plt.setp(markerline, linewidth=2, color='b')
+            plt.setp(stemlines, linewidth=1, color='b')
+            plt.setp(baseline, linewidth=2,color='black')
+            plt.show()
+
+        else:
+            intv = 1 / self.samplingRate
+            self.XVals = np.arange(self.start, self.end, intv)
+            self.YVals = self.signal.getList(self.XVals)
+            print(self.XVals)
+            print(self.YVals)
+            plt.plot(self.XVals, self.YVals)
+            plt.xlabel("Zeit")
+            plt.ylabel("Amplitude")
+            plt.show()
+
 
 class writeToFile:
     def __init__(self):
