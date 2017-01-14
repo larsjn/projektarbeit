@@ -271,8 +271,6 @@ class create(signal):
  #           self.update()
   #          return self.FyList
         
-class parseFkt(signal):
-    def 
         
 # Kontinuierliche Signale
 class sine(contiuous):
