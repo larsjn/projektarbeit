@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import lib.create_function_widgets as fct
 import operator as op
+import parser
+from math import sin, cos
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
@@ -35,6 +37,15 @@ class discrete(signal):
     pass
 
 # Basis-Klasse für Rechenoperationen (?)
+
+# Nutzereingabe Parsen
+class parseFkt(signal):
+    def __init__(self, formula):
+        self.function = parser.expr(formula).compile()
+
+    def getYAt(self, time):
+        t = time
+        return eval(self.function)
 
 
 # Eine Signal per Bildungsvorschrift erzeugen
