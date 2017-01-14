@@ -21,6 +21,7 @@ from ipywidgets import Checkbox
 from IPython.display import clear_output
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 # In[126]:
@@ -74,7 +75,7 @@ class Class_Plot_Menu (object) :
          
         self.Ftxt_Diagrammtitle = Text(layout=self.F_wdg_Layout,visible = True) 
         self.FCol_Line = ColorPicker(concise=False,value='blue')   
-        self.FFloat_Linewidth =FloatText(layout=self.F_wdg_Layout,value=1, disabled=False,continuous_update=True)
+        self.FFloat_Linewidth =FloatText(layout=self.F_wdg_Layout,value=1, disabled=False)
         self.FFloat_Baselinewidth =FloatText(layout=self.F_wdg_Layout,value=2, disabled=False)
         self.FFloat_Markersize =FloatText(layout=self.F_wdg_Layout,value=2, disabled=False)
         self.FCol_Marker = ColorPicker(concise=False,value='blue')     
@@ -83,7 +84,8 @@ class Class_Plot_Menu (object) :
         
         self.FBoxAllgemeinItems = []
         self.FBoxAllgemein = None      
-        
+
+        self.FFloat_Abtastfrequenz = FloatText(layout=self.F_wdg_Layout, value=100, disabled=False)
         
             # X Achse
         self.Ftxt_x_Achse_Titel = Text(layout=self.F_wdg_Layout,visible = True)     
@@ -130,9 +132,7 @@ class Class_Plot_Menu (object) :
 
         if self.Fsignal.FTyp ==  self.Fsignal.RS_Typ_discrete:
             # if self.Fsignal.FFunction != None:
-                
-                self.Fsignal.update()
-                xValues = self.Fsignal.getXList()
+                xValues = np.arange(self.FFloat_x_Min.value, self.FFloat_x_Max.value, 1 / self.FFloat_Abtastfrequenz.value)
                 yValues = self.Fsignal.getList(xValues)
 
                 markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')  
@@ -223,7 +223,7 @@ class Class_Plot_Menu (object) :
                                         subHBox_5,
                                         subHBox_6,
                                         Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
-                                        self.Fbol_Show_Grid                                  
+                                        self.Fbol_Show_Grid, Text(layout=self.F_wdg_Layout, value="Abtastfrequenz", disabled=True), self.FFloat_Abtastfrequenz                                  
                                       ]
             
         else:
