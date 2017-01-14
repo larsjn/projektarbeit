@@ -1,21 +1,20 @@
-from abc import ABCMeta, abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
 from . import signalgen as sig
 
-class diagram:
+class plot:
     def __init__(self, inputSig, samplingRate = 1, start = 0, end = 100):
         self.signal = inputSig
         self.samplingRate = samplingRate
         self.start = start
         self.end = end
-        self.plot()
+        self.draw()
 
     def setSignal(self, inputSig):
         self.signal = inputSig
         self.plot()
 
-    def plot(self):
+    def draw(self):
 
         if self.signal.FisDiscrete:
             xValues = self.signal.getXList()
