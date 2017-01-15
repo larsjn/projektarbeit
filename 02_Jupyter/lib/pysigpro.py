@@ -739,6 +739,7 @@ class div(signal):
 # Verschiebung
 class shift(signal):
     def __init__(self, signal, offset):
+        super().__init__(signal.FTyp)
         self.signal = signal
         self.offset = offset
 
