@@ -10,9 +10,12 @@ from ipywidgets import Text
 
 
 class Class_Input_Parser(object):
-    def __init__(self):
-        self.RS_Titel = 'Funktionseingabe'
-       
+    def __init__(self,Kontinuierlich):
+        if Kontinuierlich:
+            self.RS_Titel = 'Eingabe eines kontinuierlichen Signals'
+        else:
+            self.RS_Titel = 'Eingabe eines diskreten Signals'
+            
         self.F_wdg_Layout = Layout(display='flex',flex_flow='row',justify_content='center')
         self.F_wdg_Box_Layout = Layout(display='flex',flex_flow='column',align_items='stretch',width='100%')
         

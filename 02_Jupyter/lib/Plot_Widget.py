@@ -419,7 +419,7 @@ class Class_Plot_Menu (object) :
                                             Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
                                             self.Fbol_Show_Grid,
                                             Text(layout=self.F_wdg_Layout, value=self.RS_Abtastfrequenz, disabled=True),
-                                            self.FFloat_Abtastfrequen,
+                                            self.FFloat_Abtastfrequenz,
                                              Text(layout=self.F_wdg_Layout, value=self.RS_Legende_anzeigen,disabled=True, visible = True),    
                                             self.Fbol_Show_Legende,  
                                           ]

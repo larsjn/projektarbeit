@@ -36,7 +36,7 @@ class create_complex(object):
         self.RS_Darstellung = 'Darstellungsform'
         self.RS_Phase = 'Phase (in Grad)'
         self.RS_Betrag = 'Betrag'  
-        self.RS_Eingabe = 'Eingabe einer komplexer Zahl'
+        self.RS_Eingabe = 'Eingabe einer komplexen Zahl'
         
         self.RS_Dpb_Re_Im_Darstellung = 'Algebraische Form'
         self.RS_Dpd_Betrag_Phase_Darstellung  = 'Polarform'
