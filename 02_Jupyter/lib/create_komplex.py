@@ -60,10 +60,10 @@ class create_complex(object):
                                             layout=self.F_wdg_Layout
                                         )
 
-        self.FFloat_Im = FloatText(layout=self.F_wdg_Layout,value=10, disabled=False)
-        self.FFloat_Re = FloatText(layout=self.F_wdg_Layout,value=10, disabled=False)
-        self.FFloat_Phase = FloatText(layout=self.F_wdg_Layout,value=10, disabled=False)
-        self.FFloat_Betrag = FloatText(layout=self.F_wdg_Layout,value=10, disabled=False) 
+        self.FFloat_Im = FloatText(layout=self.F_wdg_Layout,value=0.4, disabled=False)
+        self.FFloat_Re = FloatText(layout=self.F_wdg_Layout,value=0, disabled=False)
+        self.FFloat_Phase = FloatText(layout=self.F_wdg_Layout,value=0, disabled=False)
+        self.FFloat_Betrag = FloatText(layout=self.F_wdg_Layout,value=0, disabled=False) 
         
         
         self.FHBoxAlgSubVBoxItems_1 = [  Text(layout=self.F_wdg_Layout, value=self.RS_Re,disabled=True, visible = True),
@@ -110,6 +110,7 @@ class create_complex(object):
         self.FAcc = Accordion(children=self.FAccItems)      
         
         self.create()
+        self.Float_Event_Alg_Changed(None)  
         
     def Timer_Event(self):# Warten da sonst Schleife der Änderungen 
         self.FPhaseWarten = False

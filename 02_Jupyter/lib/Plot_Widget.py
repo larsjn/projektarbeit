@@ -23,6 +23,7 @@ from IPython.display import clear_output
 
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 
 # In[126]:
@@ -65,9 +66,9 @@ class Class_Plot_Menu (object) :
         self.RS_Show_Line = 'Linie anzeigen'
         self.RS_Polarplot = 'In Polarform anzeigen'
         
-        self.RS_FigSize_X = 'Asugabegröße Y'
-        self.RS_FigSize_Y= 'Asugabegröße Y' 
-        self.RS_Hinweis_Polar ='Signal B ist im Polarplot für "add" und "sub" fehlerhaft --> Im Menu ausblenden '
+        self.RS_FigSize_X = 'Ausgabegröße X'
+        self.RS_FigSize_Y= 'Ausgabegröße Y' 
+        self.RS_Hinweis_Polar ='Signal B ist im Polarplot für "add" und "sub" nicht unterstützt --> Im Menu ausblenden '
         
         # Variablen
         self.FSignal = ASignal 
@@ -280,7 +281,7 @@ class Class_Plot_Menu (object) :
                                   markersize = self.FFloat_Markersize.value,
                                   markerfacecoloralt=self.FCol_Marker.value
                                   )                    
-                    print(self.RS_Hinwei_Polar)
+                    print(self.RS_Hinweis_Polar)
 
                      
                
@@ -320,7 +321,7 @@ class Class_Plot_Menu (object) :
             self.FTabLineSetUpItems = []
             self.Fbol_Show_Line = []
             self.FTabLineSetUp = Tab(children=self.FTabLineSetUpItems)
-
+            r = lambda: random.randint(0,255)
             for i in range(0,len(self.FToPlot)): 
                               
                 subHBox_1_items = [Text(layout=self.F_wdg_Layout, value=self.RS_Linien_Farbe,disabled=True, visible = True),
@@ -329,7 +330,7 @@ class Class_Plot_Menu (object) :
                
                 subHBox_1 = HBox(children = subHBox_1_items )
                 
-                self.FCol_Line = self.FCol_Line +  [ColorPicker(concise=False,value='blue')]
+                self.FCol_Line = self.FCol_Line +  [ColorPicker(concise=False,value= '#%02X%02X%02X' % (r(),r(),r()))]
                 self.FFloat_Linewidth =self.FFloat_Linewidth+[ FloatText(layout=self.F_wdg_Layout,value=1, disabled=False)]
                 self.Fbol_Show_Line = self.Fbol_Show_Line + [Checkbox(value=True,    disabled=False)]
 
