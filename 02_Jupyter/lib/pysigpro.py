@@ -177,9 +177,10 @@ class create(signal):
 
         if Atype == self.RS_Typ_continuous:
             self.FComplex = None
-            self.FisDiscrete = False
-            self.FFunction = inp.Class_Input_Parser()
-
+            self.FFunction = inp.Class_Input_Parser(True)
+        elif Atype == self.RS_Typ_discrete:
+            self.FComplex = None
+            self.FFunction = inp.Class_Input_Parser(False)
         elif Atype == self.RS_Typ_complex:
             self.FFunction = None
             self.FComplex = kpl.create_complex()
