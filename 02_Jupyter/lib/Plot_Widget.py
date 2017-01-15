@@ -1,9 +1,6 @@
 
 # coding: utf-8
 
-# In[115]:
-
-
 from IPython.display import display
 
 from ipywidgets import Accordion
@@ -26,11 +23,10 @@ import numpy as np
 import random
 
 
-# In[126]:
-
 class Class_Plot_Menu (object) :
     def __init__(self,ASignal,AToPlot = None, AtxtLegende=None):
     
+
         # Texte
         self.RS_Ploteinstellungen = 'Diagrammeinstellungen'
         self.RS_X_Aches_Einstellungen = 'X-Aches-Einstellungen'
@@ -46,20 +42,20 @@ class Class_Plot_Menu (object) :
         self.RS_Linien_Staerke = 'Linienstärke'
         self.RS_Marker_Groeße = 'Markergröße'
         self.RS_Baseline_Staerke = 'Baseline-Stärke'
-        
+
         self.RS_Linien_Farbe = 'Linienfarbe'
         self.RS_Marker_Farbe = 'Markerfarbe'
         self.RS_Baseline_Farbe = 'Baselinefarbe'
-        
+
         self.RS_x_Min = 'x Minimum'
         self.RS_x_Max = 'x Maximum'
-        
+
         self.RS_y_Min = 'y Minimum'
         self.RS_y_Max = 'y Maximum'
-        
+
         self.RS_Plot = 'Diagramm anzeigen'
         self.RS_Clear = 'Diagramme löschen'
-        
+
         self.RS_Show_Grid = 'Grid anzeigen'
         self.RS_Linienname = 'Linienname für Legende'
         self.RS_Legende_anzeigen = 'Legende anzeigen'
@@ -117,23 +113,19 @@ class Class_Plot_Menu (object) :
         self.FTabLineSetUp = None
         
         self.FBoxAllgemeinItems = []
-        self.FBoxAllgemein = None      
+        self.FBoxAllgemein = None
 
         self.FFloat_Abtastfrequenz = FloatText(layout=self.F_wdg_Layout, value=100, disabled=False)
-        
+
             # X Achse
-        self.Ftxt_x_Achse_Titel = Text(layout=self.F_wdg_Layout,visible = True)     
-        self.FFloat_x_Min =FloatText(layout=self.F_wdg_Layout,value=-1, disabled=False)    
-        self.FFloat_x_Max =FloatText(layout=self.F_wdg_Layout,value=1, disabled=False)
-            
-        self.FBoxXAchseItems  = []  
+        self.Ftxt_x_Achse_Titel = Text(layout=self.F_wdg_Layout,visible = True)
+        self.FFloat_x_Min =FloatText(layout=self.F_wdg_Layout,value=start, disabled=False)
+        self.FFloat_x_Max =FloatText(layout=self.F_wdg_Layout,value=end, disabled=False)
+
+        self.FBoxXAchseItems  = []
         self.FBoxXAchse = None
+
             # Y Achse
-        
-            
-            
-            
-            
         self.Ftxt_y_Achse_Titel = Text(layout=self.F_wdg_Layout,visible = True)    
         self.FFloat_y_Min =FloatText(layout=self.F_wdg_Layout,value=-1, disabled=False)    
         self.FFloat_y_Max =FloatText(layout=self.F_wdg_Layout,value=1, disabled=False)    
@@ -149,8 +141,9 @@ class Class_Plot_Menu (object) :
         
         self.FAccItems = []
         self.FAcc = None
-        
+
         self.show()
+    
     def bol_Event_Polar_Changed(self,ADummy):
          self.FPolar =  self.Fbol_Polar.value
          self.FFloat_x_Min.disabled = self.Fbol_Polar.value
@@ -160,12 +153,11 @@ class Class_Plot_Menu (object) :
          self.Fbol_Show_Legende.disabled = self.Fbol_Polar.value
          
     def Copy_Input(self):
-       
-    
          plt.title(self.Ftxt_Diagrammtitle.value)
          plt.xlabel(self.Ftxt_x_Achse_Titel.value)
          plt.ylabel(self.Ftxt_y_Achse_Titel.value)
          plt.grid(self.Fbol_Show_Grid.value)
+
          if not self.FPolar:             
              plt.ylim([self.FFloat_y_Min.value,self.FFloat_y_Max.value])
              plt.xlim([self.FFloat_x_Min.value,self.FFloat_x_Max.value])
@@ -179,14 +171,15 @@ class Class_Plot_Menu (object) :
                 xValues = np.arange(self.FFloat_x_Min.value, self.FFloat_x_Max.value, 1 / self.FFloat_Abtastfrequenz.value)
                 yValues = self.FSignal.getList(xValues)
 
-                markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')  
-                
+                markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')
+
                 plt.setp(markerline, linewidth=self.FFloat_Markersize.value, color=self.FCol_Marker.value)
                 plt.setp(stemlines, linewidth=self.FFloat_Linewidth.value, color=self.FCol_Line.value)
                 plt.setp(baseline, linewidth=self.FFloat_Baselinewidth.value,color=self.FCol_Baseline.value)
                 self.Copy_Input()
-    
+
                 plt.show()
+
         elif self.FSignal.FTyp == self.FSignal.RS_Typ_continuous:
             return  None           
             
@@ -285,15 +278,13 @@ class Class_Plot_Menu (object) :
                  
                 
             self.Copy_Input()
-            plt.show()
-                      
-#            return  None
-#        else:
-#            return  None              
-        return None # Default Ausgabe wenn kein If erfüllt wird              
-      
+            plt.show()                     
 
-    def btn_Event_clear(self,ADummy):    
+        return None # Default Ausgabe wenn kein If erfüllt wird
+
+
+
+    def btn_Event_clear(self,ADummy):
         clear_output()
     
     def show(self):      
@@ -363,17 +354,15 @@ class Class_Plot_Menu (object) :
         if self.FSignal.FTyp ==  self.FSignal.RS_Typ_discrete:
             subHBox_3_items = [Text(layout=self.F_wdg_Layout, value=self.RS_Marker_Farbe,disabled=True, visible = True),
                                Text(layout=self.F_wdg_Layout, value=self.RS_Marker_Groeße,disabled=True, visible = True)
-                              ]                           
-            subHBox_3 = HBox(children = subHBox_3_items )        
-        
-            subHBox_4_items = [self.FCol_Marker,                         
-                               self.FFloat_Markersize
-                              ]                           
-            subHBox_4 = HBox(children =  subHBox_4_items )        
-        
+                              ]
+            subHBox_3 = HBox(children = subHBox_3_items )
+
+            subHBox_4_items = [self.FCol_Marker, self.FFloat_Markersize]
+            subHBox_4 = HBox(children =  subHBox_4_items )
 
             subHBox_5_items = [Text(layout=self.F_wdg_Layout, value=self.RS_Baseline_Farbe,disabled=True, visible = True),
                            Text(layout=self.F_wdg_Layout, value=self.RS_Baseline_Staerke,disabled=True, visible = True),
+
                           ]                           
             subHBox_5 = HBox(children =  subHBox_5_items )  
             subHBox_6_items = [self.FCol_Baseline,
@@ -473,49 +462,38 @@ class Class_Plot_Menu (object) :
         self.FBoxAllgemeinItems = self.FBoxAllgemeinItems+[subHBox_8]+[subHBox_9]                                           
       
         self.FBoxAllgemein = VBox(children = self.FBoxAllgemeinItems)
-        
-        
+
+
         self.FBoxXAchseItems =  [   Text(layout=self.F_wdg_Layout, value=self.RS_x_Achse_Titel,disabled=True, visible = True),
-                                    self.Ftxt_x_Achse_Titel,                                 
+                                    self.Ftxt_x_Achse_Titel,
                                     Text(layout=self.F_wdg_Layout, value=self.RS_x_Min,disabled=True, visible = True),
                                     self.FFloat_x_Min,
                                     Text(layout=self.F_wdg_Layout, value=self.RS_x_Max,disabled=True, visible = True),
                                     self.FFloat_x_Max
-                                ]          
-        
+                                ]
+
         self.FBoxXAchse = VBox(children = self.FBoxXAchseItems)
-        
+
         self.FBoxYAchseItems =  [   Text(layout=self.F_wdg_Layout, value=self.RS_y_Achse_Titel,disabled=True, visible = True),
                                     self.Ftxt_y_Achse_Titel,
                                     Text(layout=self.F_wdg_Layout, value=self.RS_y_Min,disabled=True, visible = True),
                                     self.FFloat_y_Min,
                                     Text(layout=self.F_wdg_Layout, value=self.RS_y_Max,disabled=True, visible = True),
                                     self.FFloat_y_Max
-                                ]          
+                                ]
         self.FBoxYAchse = VBox(children = self.FBoxYAchseItems)
-        
 
         subHBox_7_items =[self.Fbtn_plot,self.Fbtn_clear]
-        subHBox_7 = HBox(children = subHBox_7_items)       
-        self.FBoxDoPlotItems  = [subHBox_7]  
-        self.FBoxDoPlot = VBox(children = self.FBoxDoPlotItems)                          
-        
-    
-    
-        self.FAccItems = [self.FBoxAllgemein,self.FBoxXAchse,self.FBoxYAchse,self.FBoxDoPlot]   
-    
-    
+        subHBox_7 = HBox(children = subHBox_7_items)
+        self.FBoxDoPlotItems  = [subHBox_7]
+        self.FBoxDoPlot = VBox(children = self.FBoxDoPlotItems)
+
+        self.FAccItems = [self.FBoxAllgemein,self.FBoxXAchse,self.FBoxYAchse,self.FBoxDoPlot]
+
         self.FAcc = Accordion(children=self.FAccItems)
-        
+
         self.FAcc.set_title(0, self.RS_Ploteinstellungen)
         self.FAcc.set_title(1, self.RS_X_Aches_Einstellungen)
-        self.FAcc.set_title(2, self.RS_Y_Aches_Einstellungen)    
-        self.FAcc.set_title(3, self.RS_Plot)    
-        display(self.FAcc)       
-        
-
-
-# In[ ]:
-
-
-
+        self.FAcc.set_title(2, self.RS_Y_Aches_Einstellungen)
+        self.FAcc.set_title(3, self.RS_Plot)
+        display(self.FAcc)
