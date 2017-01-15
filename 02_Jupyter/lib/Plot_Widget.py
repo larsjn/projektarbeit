@@ -88,7 +88,8 @@ class Class_Plot_Menu (object) :
         self.FFloat_Linewidth = []  
         self.Fbol_Show_Line = []
         if AtxtLegende != None :
-            if len(AtxtLegende) == len(self.FToPlot): # Wenn es weniger oder mehr legenden als Signale gibt keine Legende übernehmen   
+            # Wenn es weniger oder mehr legenden als Signale gibt keine Legende übernehmen
+            if len(AtxtLegende) == len(self.FToPlot): 
                 self.FDefaultLegend = AtxtLegende
             else:
                 self.FDefaultLegend = None
@@ -167,21 +168,24 @@ class Class_Plot_Menu (object) :
         plt.figure(figsize=(self.FFloat_FigSize_X.value,self.FFloat_FigSize_Y.value))
         
         if self.FSignal.FTyp ==  self.FSignal.RS_Typ_discrete:
-            # if self.Fsignal.FFunction != None:
-                xValues = np.arange(self.FFloat_x_Min.value, self.FFloat_x_Max.value, 1 / self.FFloat_Abtastfrequenz.value)
-                yValues = self.FSignal.getList(xValues)
+            xValues = np.arange(self.FFloat_x_Min.value,
+                                self.FFloat_x_Max.value,
+                                1 / self.FFloat_Abtastfrequenz.value)
+            yValues = self.FSignal.getList(xValues)
 
-                markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')
+            markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')
 
-                plt.setp(markerline, linewidth=self.FFloat_Markersize.value, color=self.FCol_Marker.value)
-                plt.setp(stemlines, linewidth=self.FFloat_Linewidth.value, color=self.FCol_Line.value)
-                plt.setp(baseline, linewidth=self.FFloat_Baselinewidth.value,color=self.FCol_Baseline.value)
-                self.Copy_Input()
+            plt.setp(markerline, linewidth=self.FFloat_Markersize.value, color=self.FCol_Marker.value)
+            plt.setp(stemlines, linewidth=self.FFloat_Linewidth.value, color=self.FCol_Line.value)
+            plt.setp(baseline, linewidth=self.FFloat_Baselinewidth.value,color=self.FCol_Baseline.value)
+            self.Copy_Input()
 
-                plt.show()
+            plt.show()
 
         elif self.FSignal.FTyp == self.FSignal.RS_Typ_continuous:
-            xValues = np.arange(self.FFloat_x_Min.value, self.FFloat_x_Max.value, 1 / self.FFloat_Abtastfrequenz.value)
+            xValues = np.arange(self.FFloat_x_Min.value,
+                                self.FFloat_x_Max.value,
+                                1 / self.FFloat_Abtastfrequenz.value)
             yValues = self.FSignal.getList(xValues)
             plt.title(self.Ftxt_Diagrammtitle.value)
             plt.xlabel(self.Ftxt_x_Achse_Titel.value)

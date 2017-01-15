@@ -754,12 +754,12 @@ class shift(signal):
 # Faltung
 class convolve(discrete):
     def __init__(self, signalA, signalB, samplRate = 1, start = 0, end = 100):
+        super().__init__("discrete")
         self.sigA = signalA
         self.sigB = signalB
         self.samplingRate = samplRate
         self.start = start
         self.end = end
-        self.type = "discrete"
 
     def getYAt(self, time):
 
@@ -789,6 +789,7 @@ class convolve(discrete):
     def getList(self, inList):
         AVals = self.sigA.getList(inList)
         BVals = self.sigB.getList(inList)
-        return np.convolve(AVals, BVals)
+        outList = np.convolve(AVals, BVals).tolist()
+        del outList[len(AVals):] 
+        return outList
 
-# ToDo: Stauchung
