@@ -204,22 +204,11 @@ class create(signal):
                 self.FComplex = None
                 return None
         else:
-            return None
-        return None
-
-    def getYAt(self,Ax):
-        if self.FTyp ==  self.RS_Typ_discrete:
-            if self.FFunction != None:
-                try:
-                    self.update()
-                    xList = self.FxList
-                    i = xList.index(Ax)
-                    yList = self.FyList
-                    out = yList[i]
-                except ValueError:
-                    out = None
-                return out
-        elif self.FTyp == self.RS_Typ_continuous:
+            return None 
+        return None       
+     
+    def getYAt(self,Ax): 
+        if (self.FTyp ==  self.RS_Typ_discrete ) or (self.FTyp == self.RS_Typ_continuous):
             if self.FFunction.FInput != self.input:
                 self.parsedFktn = parseFkt(self.FFunction.FInput)
                 self.input = self.FFunction.FInput
@@ -237,27 +226,11 @@ class create(signal):
             return self.FFunction.FResultSignal.__str__()
         else:
             print("Signal ist nicht kontinuierlich")
-        return None # Default Ausgabe wenn kein If erfüllt wird
 
-    def update(self):
-        if self.FTyp ==  self.RS_Typ_discrete:
-            if self.FFunction != None:
-                if isinstance(self.FFunction.FxWerte, (list)): # Prüfen ob schon eine Liste
-                       self.FxList = self.FFunction.FxWerte
-                else:
-                       self.FxList = self.FFunction.FxWerte.tolist()
+        return None # Default Ausgabe wenn kein If erfüllt wird  
 
-                if isinstance(self.FFunction.FyWerte, (list)): # Prüfen ob schon eine Liste
-                       self.FyList = self.FFunction.FyWerte
-                else:
-                       self.FyList = self.FFunction.FxWerte.tolist()
-        elif self.FTyp == self.RS_Typ_continuous:
-            return None
-        elif self.FTyp == self.RS_Typ_complex:
-            return None
-        else:
-            return None
-        return None # Default Ausgabe wenn kein If erfüllt wir
+
+
 
 
     def getXList(self):

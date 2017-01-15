@@ -182,12 +182,12 @@ class Class_Plot_Menu (object) :
 
         elif self.FSignal.FTyp == self.FSignal.RS_Typ_continuous:
             return  None           
+            
+            
+            
+            
         elif self.FSignal.FTyp == self.FSignal.RS_Typ_complex:
-            
-          #  if self.FSignal.FComplex  != None:
-
-
-            
+                
             if not self.FPolar:
                     if isinstance(self.FToPlot, (list)):    
                         ReStart = []
@@ -257,11 +257,6 @@ class Class_Plot_Menu (object) :
                                                       markersize = self.FFloat_Markersize.value,
                                                       markerfacecoloralt=self.FCol_Marker.value
                                           )]
-                              
-                    
-                           
-                         
- 
                     else:
                     
                         thetaEnd = self.FToPlot.getAngle(False)
@@ -283,12 +278,10 @@ class Class_Plot_Menu (object) :
                  
                 
             self.Copy_Input()
-            plt.show()
-                      
-#            return  None
-#        else:
-#            return  None
+            plt.show()                     
+
         return None # Default Ausgabe wenn kein If erfüllt wird
+
 
 
     def btn_Event_clear(self,ADummy):
@@ -377,23 +370,7 @@ class Class_Plot_Menu (object) :
                           ]                           
             subHBox_6 = HBox(children = subHBox_6_items) 
             if isinstance(self.FToPlot, (list)):
-                self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
-                                            self.Ftxt_Diagrammtitle,
-                                            subHBox_1,
-                                            subHBox_2,
-                                            subHBox_3,
-                                            subHBox_4,
-                                            subHBox_5,
-                                            subHBox_6,
-                                            Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
-                                            self.Fbol_Show_Grid,
-                                            Text(layout=self.F_wdg_Layout, value=self.RS_Abtastfrequenz, disabled=True),
-                                            self.FFloat_Abtastfrequenz,
-                                             Text(layout=self.F_wdg_Layout, value=self.RS_Legende_anzeigen,disabled=True, visible = True),    
-                                            self.Fbol_Show_Legende,  
-                                          ]                
-                
-            else:
+               
                 self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
                                             self.Ftxt_Diagrammtitle,
                                             self.FTabLineSetUp,
@@ -405,7 +382,25 @@ class Class_Plot_Menu (object) :
                                             self.Fbol_Show_Grid,
                                             Text(layout=self.F_wdg_Layout, value=self.RS_Abtastfrequenz, disabled=True),
                                             self.FFloat_Abtastfrequenz,
-                                             Text(layout=self.F_wdg_Layout, value=self.RS_Legende_anzeigen,disabled=True, visible = True),    
+                                            Text(layout=self.F_wdg_Layout, value=self.RS_Legende_anzeigen,disabled=True, visible = True),    
+                                            self.Fbol_Show_Legende,  
+                                          ]                
+                
+            else:
+               
+                self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
+                                            self.Ftxt_Diagrammtitle,
+                                            subHBox_1,
+                                            subHBox_2,                                            
+                                            subHBox_3,
+                                            subHBox_4,
+                                            subHBox_5,
+                                            subHBox_6,
+                                            Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
+                                            self.Fbol_Show_Grid,
+                                            Text(layout=self.F_wdg_Layout, value=self.RS_Abtastfrequenz, disabled=True),
+                                            self.FFloat_Abtastfrequenz,
+                                            Text(layout=self.F_wdg_Layout, value=self.RS_Legende_anzeigen,disabled=True, visible = True),    
                                             self.Fbol_Show_Legende,  
                                           ]
             
