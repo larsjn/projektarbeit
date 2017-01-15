@@ -40,7 +40,7 @@ class create_complex(object):
         
         self.RS_Dpb_Re_Im_Darstellung = 'Algebraische Form'
         self.RS_Dpd_Betrag_Phase_Darstellung  = 'Polarform'
-        
+        self.RS_Hinweise = 'Eingaben werden automatisch übernommen'   
         
         self.RS_Plus = '+'
         self.RS_Minus = '-'
@@ -143,8 +143,7 @@ class create_complex(object):
             
             self.FAlgWarten = True
             self.FFloat_Re.value = self.FFloat_Betrag.value * np.cos(np.radians(self.FFloat_Phase.value ))          
-            self.FFloat_Im.value = self.FFloat_Betrag.value * np.sin(np.radians(self.FFloat_Phase.value )) 
-            
+            self.FFloat_Im.value = self.FFloat_Betrag.value * np.sin(np.radians(self.FFloat_Phase.value ))             
             self.FZ=self.FFloat_Re.value+1j*self.FFloat_Im.value
             self.FIm = self.FFloat_Im.value
             self.FRe = self.FFloat_Re.value
@@ -159,11 +158,10 @@ class create_complex(object):
        
         self.FFloat_Phase.observe(self.Float_Event_Polar_Changed)
         self.FFloat_Betrag.observe(self.Float_Event_Polar_Changed)
- 
         self.FFloat_Im.observe(self.Float_Event_Alg_Changed)
-        self.FFloat_Re.observe(self.Float_Event_Alg_Changed)
-                               
+        self.FFloat_Re.observe(self.Float_Event_Alg_Changed)                               
         self.FAcc.set_title(0, self.RS_Eingabe)
+        print(self.RS_Hinweise)
         display(self.FAcc) 
     
         

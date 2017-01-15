@@ -130,7 +130,7 @@ class signal(metaclass=ABCMeta):
             sigplt.Class_Plot_Menu(self)
             return  None
         elif self.FTyp == self.RS_Typ_continuous:
-            return  None
+            sigplt.Class_Plot_Menu(self)
         elif self.FTyp == self.RS_Typ_complex:
             sigplt.Class_Plot_Menu(self)
             return  None
@@ -431,6 +431,7 @@ class add(signal):
             sigplt.Class_Plot_Menu(self)                    
             return  None
         elif self.FTyp == self.RS_Typ_continuous:
+            sigplt.Class_Plot_Menu(self)  
             return  None
         elif self.FTyp == self.RS_Typ_complex:
                  # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]   
@@ -531,6 +532,7 @@ class sub(signal):
             sigplt.Class_Plot_Menu(self)                    
             return  None
         elif self.FTyp == self.RS_Typ_continuous:
+            sigplt.Class_Plot_Menu(self)  
             return  None
         elif self.FTyp == self.RS_Typ_complex:
                  # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]   
@@ -565,6 +567,7 @@ class mul(signal):
         if self.FTyp ==  self.RS_Typ_discrete:
             return  None
         elif self.FTyp == self.RS_Typ_continuous:
+            
             return  None           
         elif self.FTyp == self.RS_Typ_complex:
                 if not AAsNumpy:
@@ -624,6 +627,7 @@ class mul(signal):
             sigplt.Class_Plot_Menu(self)                    
             return  None
         elif self.FTyp == self.RS_Typ_continuous:
+            sigplt.Class_Plot_Menu(self)  
             return  None
         elif self.FTyp == self.RS_Typ_complex:
                  # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]   
@@ -657,6 +661,7 @@ class div(signal):
         if self.FTyp ==  self.RS_Typ_discrete:
             return  None
         elif self.FTyp == self.RS_Typ_continuous:
+            
             return  None           
         elif self.FTyp == self.RS_Typ_complex:
                 if not AAsNumpy:
@@ -717,6 +722,7 @@ class div(signal):
             sigplt.Class_Plot_Menu(self)                    
             return  None
         elif self.FTyp == self.RS_Typ_continuous:
+            sigplt.Class_Plot_Menu(self)  
             return  None
         elif self.FTyp == self.RS_Typ_complex:
                  # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]   
