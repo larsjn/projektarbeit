@@ -229,18 +229,10 @@ class create(signal):
 
         return None # Default Ausgabe wenn kein If erfüllt wird  
 
-
-
-
-
     def getXList(self):
         if self.FFunction != None:
             self.update()
             return self.FxList
- #   def getYList(self):
- #       if self.FFunction != None:
- #           self.update()
-  #          return self.FyList
 
 
 # Kontinuierliche Signale
@@ -260,8 +252,8 @@ class sine(contiuous):
         self.amplitude = amplitude
 
     def update(self):
-        self.frequency = self.sfreq.val
-        self.amplitude = self.samp.val
+        self.frequency = self.frequency
+        self.amplitude = self.amplitude
 
     def __str__(self):
         return "{0}*sin(2*PI*{1}*t)".format(self.amplitude, self.frequency)
@@ -341,7 +333,6 @@ class contToDisc(signal):
         return self.yList
 
 
-
 # Rechenoperationen
 class add(signal):
     def __init__(self, AsignalA, AsignalB):
@@ -375,17 +366,6 @@ class add(signal):
         else:
             print('ERROR: Signaltypen unterscheiden sich')                 
         return None # Default Ausgabe wenn kein If erfüllt wird   
-#    def getXList(self):
-#        if self.FsigA.FTyp == self.FsigB.FTyp:
-#            if self.FTyp == self.RS_Typ_discrete: 
-#                xA = self.FsigA.getXList()
-#                xB = self.FsigB.getXList()
-#                
-#                if xA == xB and xA != None:
-#                    return xA
-#                else: 
-#                    print('ERROR: X-Listen unterscheiden sich')
-#        return  None        
         
     def getZ(self,AAsNumpy=False):
         if self.FTyp ==  self.RS_Typ_discrete:

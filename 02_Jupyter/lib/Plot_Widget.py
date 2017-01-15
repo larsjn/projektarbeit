@@ -119,8 +119,8 @@ class Class_Plot_Menu (object) :
 
             # X Achse
         self.Ftxt_x_Achse_Titel = Text(layout=self.F_wdg_Layout,visible = True)
-        self.FFloat_x_Min =FloatText(layout=self.F_wdg_Layout,value=start, disabled=False)
-        self.FFloat_x_Max =FloatText(layout=self.F_wdg_Layout,value=end, disabled=False)
+        self.FFloat_x_Min =FloatText(layout=self.F_wdg_Layout,value=-10, disabled=False)
+        self.FFloat_x_Max =FloatText(layout=self.F_wdg_Layout,value=10, disabled=False)
 
         self.FBoxXAchseItems  = []
         self.FBoxXAchse = None
@@ -181,10 +181,15 @@ class Class_Plot_Menu (object) :
                 plt.show()
 
         elif self.FSignal.FTyp == self.FSignal.RS_Typ_continuous:
-            return  None           
-            
-            
-            
+            xValues = np.arange(self.FFloat_x_Min.value, self.FFloat_x_Max.value, 1 / self.FFloat_Abtastfrequenz.value)
+            yValues = self.FSignal.getList(xValues)
+            plt.title(self.Ftxt_Diagrammtitle.value)
+            plt.xlabel(self.Ftxt_x_Achse_Titel.value)
+            plt.ylabel(self.Ftxt_y_Achse_Titel.value)
+            plt.grid(self.Fbol_Show_Grid.value)
+            plt.plot(xValues, yValues)
+            plt.show()
+          
             
         elif self.FSignal.FTyp == self.FSignal.RS_Typ_complex:
                 
