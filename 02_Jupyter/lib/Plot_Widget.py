@@ -191,7 +191,7 @@ class Class_Plot_Menu (object) :
             plt.xlabel(self.Ftxt_x_Achse_Titel.value)
             plt.ylabel(self.Ftxt_y_Achse_Titel.value)
             plt.grid(self.Fbol_Show_Grid.value)
-            plt.plot(xValues, yValues)
+            plt.plot(xValues, yValues,linewidth=self.FFloat_Linewidth.value,color=self.FCol_Line.value,   )
             plt.show()
           
             
@@ -378,26 +378,9 @@ class Class_Plot_Menu (object) :
                             self.FFloat_Baselinewidth
                           ]                           
             subHBox_6 = HBox(children = subHBox_6_items) 
-            if isinstance(self.FToPlot, (list)):
-               
-                self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
-                                            self.Ftxt_Diagrammtitle,
-                                            self.FTabLineSetUp,
-                                            subHBox_3,
-                                            subHBox_4,
-                                            subHBox_5,
-                                            subHBox_6,
-                                            Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
-                                            self.Fbol_Show_Grid,
-                                            Text(layout=self.F_wdg_Layout, value=self.RS_Abtastfrequenz, disabled=True),
-                                            self.FFloat_Abtastfrequenz,
-                                            Text(layout=self.F_wdg_Layout, value=self.RS_Legende_anzeigen,disabled=True, visible = True),    
-                                            self.Fbol_Show_Legende,  
-                                          ]                
-                
-            else:
-               
-                self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
+            
+            
+            self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
                                             self.Ftxt_Diagrammtitle,
                                             subHBox_1,
                                             subHBox_2,                                            
@@ -409,9 +392,54 @@ class Class_Plot_Menu (object) :
                                             self.Fbol_Show_Grid,
                                             Text(layout=self.F_wdg_Layout, value=self.RS_Abtastfrequenz, disabled=True),
                                             self.FFloat_Abtastfrequenz,
-                                            Text(layout=self.F_wdg_Layout, value=self.RS_Legende_anzeigen,disabled=True, visible = True),    
-                                            self.Fbol_Show_Legende,  
+                                           
                                           ]
+# Für Plotten mehrere Linien                                          
+#            if isinstance(self.FToPlot, (list)):
+#               
+#                self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
+#                                            self.Ftxt_Diagrammtitle,
+#                                            self.FTabLineSetUp,
+#                                            subHBox_3,
+#                                            subHBox_4,
+#                                            subHBox_5,
+#                                            subHBox_6,
+#                                            Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
+#                                            self.Fbol_Show_Grid,
+#                                            Text(layout=self.F_wdg_Layout, value=self.RS_Abtastfrequenz, disabled=True),
+#                                            self.FFloat_Abtastfrequenz,
+#                                            Text(layout=self.F_wdg_Layout, value=self.RS_Legende_anzeigen,disabled=True, visible = True),    
+#                                            self.Fbol_Show_Legende,  
+#                                          ]                
+#                
+#            else:
+#               
+#                self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
+#                                            self.Ftxt_Diagrammtitle,
+#                                            subHBox_1,
+#                                            subHBox_2,                                            
+#                                            subHBox_3,
+#                                            subHBox_4,
+#                                            subHBox_5,
+#                                            subHBox_6,
+#                                            Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
+#                                            self.Fbol_Show_Grid,
+#                                            Text(layout=self.F_wdg_Layout, value=self.RS_Abtastfrequenz, disabled=True),
+#                                            self.FFloat_Abtastfrequenz,
+#                                           
+#                                          ]
+        elif self.FSignal.FTyp == self.FSignal.RS_Typ_continuous:
+       
+            self.FBoxAllgemeinItems = [ Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel,disabled=True, visible = True),
+                                            self.Ftxt_Diagrammtitle,
+                                            subHBox_1,
+                                            subHBox_2,                                          
+                                            Text(layout=self.F_wdg_Layout, value=self.RS_Show_Grid,disabled=True, visible = True),                                   
+                                            self.Fbol_Show_Grid,
+                                            Text(layout=self.F_wdg_Layout, value=self.RS_Abtastfrequenz, disabled=True),
+                                            self.FFloat_Abtastfrequenz,                                           
+                                          ]
+
             
         elif self.FSignal.FTyp ==  self.FSignal.RS_Typ_complex:
             
