@@ -172,7 +172,11 @@ class Class_Plot_Menu (object) :
                                 self.FFloat_x_Max.value,
                                 1 / self.FFloat_Abtastfrequenz.value)
             yValues = self.FSignal.getList(xValues)
-
+            if yValues[0] == False: # Wenn aus Datei eingelesn diese Werte nehmen
+                xValues = yValues[1][0] 
+                yValues = yValues[2][0]
+            
+                
             markerline, stemlines, baseline = plt.stem( xValues,yValues, '-.')
 
             plt.setp(markerline, linewidth=self.FFloat_Markersize.value, color=self.FCol_Marker.value)
@@ -298,10 +302,16 @@ class Class_Plot_Menu (object) :
     
     def show(self):      
         
-
+       
         self.Fbtn_plot.on_click(self.btn_Event_show_plot) 
         self.Fbtn_clear.on_click(self.btn_Event_clear) 
         self.Fbol_Polar.observe(self.bol_Event_Polar_Changed) 
+        
+        if self.FSignal.getList(xValues)[0] == False:
+             self.FFloat_Abtastfrequenz.disabled=True
+        else:
+             self.FFloat_Abtastfrequenz.disabled=False
+        
         if isinstance(self.FToPlot, (list)):
             
             self.FCol_Line = []
