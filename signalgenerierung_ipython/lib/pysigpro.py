@@ -1,14 +1,11 @@
-from abc import ABCMeta, abstractmethod
+import lib.createcomplexsignal as kpl
+import lib.createsignal as inp
+import lib.plotwidget as sigplt
 import numpy as np
-import matplotlib.pyplot as plt
-#import lib.create_function_widgets as fct
-import lib.create_komplex as kpl
-import operator as op
-import lib.Plot_Widget as sigplt
 import parser
-from math import *
-import lib.Input_Parser as inp
 import csv
+from abc import ABCMeta, abstractmethod
+from math import *
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
@@ -23,6 +20,7 @@ class signal(metaclass=ABCMeta):
         self.FComplex
         self.FSignal = None
 
+#Operatorüberladungen für Rechenoperationen
     def __add__(self, other):
         return add(self, other)
 
@@ -35,14 +33,15 @@ class signal(metaclass=ABCMeta):
     def __truediv__(self, other):
         return div(self, other)
 
+#Y-Wert an stelle X berechnen        
     def getYAt(selfe,Ax):
          pass
-
+     
+#X-Werte-Liste eines diskreten Signals falls vorhanden
     def getXList(self):
         return None
- #   def getYList(self):
- #       return None
-
+        
+#Y-Werte an X Stellen berechnen -> Liste erzeugen
     def getList(self, inList):
 
         if (self.FTyp == self.RS_Typ_discrete) or (self.FTyp == self.RS_Typ_continuous) :
@@ -54,6 +53,7 @@ class signal(metaclass=ABCMeta):
             return  None
         return None # Default Ausgabe wenn kein If erfüllt wird
 
+#Konvertiert Komplexes-Eingabeformat zu Komplexem-Numpy-Format (True) oder behält Komplexes-Eingabeformat bei      
     def getZ(self,AAsNumpy=False):
         if self.FTyp ==  self.RS_Typ_discrete:
             return  None
@@ -70,6 +70,7 @@ class signal(metaclass=ABCMeta):
             return  None
         return None # Default Ausgabe wenn kein If erfüllt wird
 
+#Gibt den Realteil der komplexen Zahl zurück
     def getRe(self):
         if self.FTyp ==  self.RS_Typ_discrete:
             return  None
@@ -82,7 +83,8 @@ class signal(metaclass=ABCMeta):
         else:
             return  None
         return None # Default Ausgabe wenn kein If erfüllt wird
-
+        
+#Gibt den Imaginärteil der komplexen Zahl zurück
     def getIm(self):
         if self.FTyp ==  self.RS_Typ_discrete:
             return  None
@@ -96,6 +98,7 @@ class signal(metaclass=ABCMeta):
             return  None
         return None # Default Ausgabe wenn kein If erfüllt wird
 
+#Gibt den Polaren-Winkel der komplexen Zahl zurück(Grad, oder Rad)
     def getAngle(self,ADegree = True):
         if self.FTyp ==  self.RS_Typ_discrete:
             return  None
@@ -112,6 +115,7 @@ class signal(metaclass=ABCMeta):
             return  None
         return None # Default Ausgabe wenn kein If erfüllt wird
 
+#Gibt den Betrag der komplexen Zahl zurück
     def getAbs(self):
         if self.FTyp ==  self.RS_Typ_discrete:
             return  None
@@ -124,20 +128,13 @@ class signal(metaclass=ABCMeta):
         else:
             return  None              
         return None # Default Ausgabe wenn kein If erfüllt wird              
-        
-    def plot(self):
-        if self.FTyp ==  self.RS_Typ_discrete:
-            sigplt.Class_Plot_Menu(self)
-            return  None
-        elif self.FTyp == self.RS_Typ_continuous:
-            sigplt.Class_Plot_Menu(self)
-        elif self.FTyp == self.RS_Typ_complex:
-            sigplt.Class_Plot_Menu(self)
-            return  None
-        else:
-            return  None
-        return None # Default Ausgabe wenn kein If erfüllt wird
 
+#Plottet Signale      
+    def plot(self):
+        sigplt.Class_Plot_Menu(self)
+        return None 
+        
+#Updated Klassenvariablen 
     def update(self):
         pass
 
@@ -164,17 +161,17 @@ class parseFkt(signal):
         self.FTyp = self.RS_Typ_continuous
 
     def getYAt(self, time):
-        t = time
+        t = time                    #Selbst wenn Spyder oder ein anderer Kompiler hier meckert. Das muss so!!!!
         return eval(self.function)
 
 # Eine Signal per Bildungsvorschrift erzeugen
 class create(signal):
     def __init__ (self, Atype):
-
+        #Initialisierung der Basisklasse
         super().__init__(Atype)
-
+        #Funktion als String (Parsereingabe zwischenspeicher)
         self.input = None
-
+        #Erzeugen der Eingbaemaske je nach gewähltem Typ
         if Atype == self.RS_Typ_continuous:
             self.FComplex = None
             self.FFunction = inp.Class_Input_Parser(True)
@@ -187,9 +184,10 @@ class create(signal):
         else:
             print("Mögliche Parameter:"+ self.RS_Typ_discrete+","+self.RS_Typ_continuous+","+self.RS_Typ_complex)
 
-        self.FxList = None
-        self.FyList = None
+        #self.FxList = None         LEGACY UNFUG
+        #self.FyList = None
 
+#Vorsorgliche Speicherfreigabe implementierung (unused)
     def delete_Values(self):
         if self.FTyp ==  self.RS_Typ_discrete:
             if self.FFunction != None:
@@ -209,6 +207,7 @@ class create(signal):
      
     def getYAt(self,Ax): 
         if (self.FTyp ==  self.RS_Typ_discrete ) or (self.FTyp == self.RS_Typ_continuous):
+            #Wenn sich die Eingabefunktion geändert hat: Neu parsen. Sonst bestehende Funktion verwenden
             if self.FFunction.FInput != self.input:
                 self.parsedFktn = parseFkt(self.FFunction.FInput)
                 self.input = self.FFunction.FInput
@@ -221,21 +220,22 @@ class create(signal):
             return None
         return None # Default Ausgabe wenn kein If erfüllt wird
 
+#Ausgabe der Eingabe beim Printbefehl        
     def __str__(self):
-        if self.FTyp == self.RS_Typ_discrete:
-            return self.FFunction.FResultSignal.__str__()
+        if (self.FTyp ==  self.RS_Typ_discrete ) or (self.FTyp == self.RS_Typ_continuous):
+            return self.input
         else:
-            print("Signal ist nicht kontinuierlich")
+            print("Signal ist nicht kontinuierlich oder diskret")
 
         return None # Default Ausgabe wenn kein If erfüllt wird  
 
-    def getXList(self):
-        if self.FFunction != None:
-            self.update()
-            return self.FxList
+   # def getXList(self):
+   #    if self.FFunction != None:
+   #       self.update()
+   #       return self.FxList
 
 
-# Kontinuierliche Signale
+# Kontinuierliche Signale - Klassendefinitonen 
 class sine(contiuous):
     def __init__(self, frequency = 1, amplitude = 1):
         self.frequency = float(frequency)
@@ -304,7 +304,7 @@ class square(contiuous):
         self.time = 1 / self.frequency
         self.onTime = self.time * self.dutyCycle
 
-# ToDo: Dreieck, Sägezahn
+#Erweiterungsmöglichkeiten, z.B.: Dreieck oder Sägezahn Funktionsklassen
 
 
 class const(contiuous):
@@ -333,7 +333,7 @@ class contToDisc(signal):
         return self.yList
 
 
-# Rechenoperationen
+# Rechenoperationen Klassendefinitionen
 class add(signal):
     def __init__(self, AsignalA, AsignalB):
 
@@ -462,7 +462,7 @@ class sub(signal):
     def setSigA(self, AsignalA):
         self.FsigA = AsignalA
 
-    def setSigB(self, signalB):
+    def setSigB(self, AsignalB):
         self.FsigB = AsignalB
 
     def getYAt(self, Atime):
@@ -794,10 +794,11 @@ class convolve(discrete):
         del outList[len(AVals):] 
         return outList
 
+# Mögliche Erweiterung: Import von Dateien. Beispiel Signal.csv im Ansatz gegeben:        
 class List(discrete):
-    def __init__(self):
+    def __init__(self, AFilePath):
         super().__init__("discrete")
-        self.FFilePath = 'Sinus.csv'
+        self.FFilePath = AFilePath
         self.xList = None
         self.yList = None
         self.read()

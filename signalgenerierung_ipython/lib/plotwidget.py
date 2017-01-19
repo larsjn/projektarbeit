@@ -1,8 +1,10 @@
-
 # coding: utf-8
 
+import matplotlib.pyplot as plt
+import numpy as np
+import random
 from IPython.display import display
-
+from IPython.display import clear_output
 from ipywidgets import Accordion
 from ipywidgets import Layout
 from ipywidgets import Box
@@ -16,11 +18,6 @@ from ipywidgets import ColorPicker
 from ipywidgets import Checkbox
 from ipywidgets import BoundedFloatText
 
-from IPython.display import clear_output
-
-import matplotlib.pyplot as plt
-import numpy as np
-import random
 
 
 class Class_Plot_Menu (object) :
@@ -307,10 +304,10 @@ class Class_Plot_Menu (object) :
         self.Fbtn_clear.on_click(self.btn_Event_clear) 
         self.Fbol_Polar.observe(self.bol_Event_Polar_Changed) 
         
-        if self.FSignal.getList(xValues)[0] == False:
-             self.FFloat_Abtastfrequenz.disabled=True
-        else:
-             self.FFloat_Abtastfrequenz.disabled=False
+        #if self.FSignal.getList([10])[0] == False:
+        #     self.FFloat_Abtastfrequenz.disabled=True
+        #else:
+        #     self.FFloat_Abtastfrequenz.disabled=False
         
         if isinstance(self.FToPlot, (list)):
             

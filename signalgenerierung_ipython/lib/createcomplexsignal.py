@@ -1,27 +1,14 @@
-
 # coding: utf-8
 
-# In[114]:
-
+import numpy as np
 from IPython.display import display
-
 from ipywidgets import Accordion
 from ipywidgets import Layout
-from ipywidgets import Box
 from ipywidgets import VBox
 from ipywidgets import HBox
-from ipywidgets import Button
 from ipywidgets import Text
 from ipywidgets import FloatText
-from ipywidgets import Tab
-from ipywidgets import ColorPicker
-from ipywidgets import Checkbox
 from ipywidgets import Dropdown
-
-from IPython.display import clear_output
-
-import matplotlib.pyplot as plt
-import numpy as np
 from threading import Timer
 
 
