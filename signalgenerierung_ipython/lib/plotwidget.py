@@ -22,7 +22,7 @@ from ipywidgets import BoundedFloatText
 #   - übergabe Parameter wurden mit einem A vor dem Namen gekennzeichnet
 #   - def übergreifende Variablen wurden zunächst alle in der Init vor definiert
 #            o  def übergreifende Variablen wurden mit einem F vor dem Namen gekennzeichnet
-#   - Texte die angezeigt werden wurden in der Init definiert und mit RS_ gekennzeichnet 
+#   - Texte die angezeigt werden wurden in der Init definiert und mit RS_ gekennzeichnet
 #            o  wenn Widget im Init definiert wurde ggf. der String direckt im Widget definiert
 
 class Class_Plot_Menu (object):
@@ -60,40 +60,40 @@ class Class_Plot_Menu (object):
         self.RS_FigSize_Y               = 'Ausgabegröße Y'
         self.RS_Hinweis_Polar           = 'Signal B ist im Polarplot für "add" und "sub" nicht unterstützt --> Im Menu ausblenden '
 
-    # =============================================== def übergreifende Variablen ===============================================       
+    # =============================================== def übergreifende Variablen ===============================================
         self.FSignal            = ASignal
-        self.FPolar             = False        
+        self.FPolar             = False
         self.Ftxt_Linetitle     = []
         self.FCol_Line          = []
         self.FFloat_Linewidth   = []
         self.Fbol_Show_Line     = []
-        
-        # Prüft ob ein andres Siganl als das übergabe Siganl geplottet werden soll (z.B. bei komplexen Zaheln)
-        # Wenn nicht dan ist das übergabe Signal auch das zuplottende 
+
+        # Prüft ob ein anderes Signal als das übergabe-Signal geplottet werden soll (z.B. bei komplexen Zaheln)
+        # Wenn nicht dann ist das übergabe-Signal auch das zu plottende
         if AToPlot == None:
             self.FToPlot = ASignal
         else:
             self.FToPlot = AToPlot
-            
-            
-        # Wenn Legende mit übergeben dan diese verweden (bei koplexen Zahlen)
+
+
+        # Wenn Legende mit übergeben dann diese verwenden (bei komplexen Zahlen)
         if AtxtLegende != None:
-            # Wenn es weniger oder mehr legenden als Signale gibt keine Legende
+            # Wenn es weniger oder mehr Legenden als Signale gibt keine Legende
             # übernehmen
             if len(AtxtLegende) == len(self.FToPlot):
                 self.FDefaultLegend = AtxtLegende
             else:
                 self.FDefaultLegend = None
         else:
-            self.FDefaultLegend = None           
-            
-    # =============================================== def übergreifende Widgets  =============================================== 
+            self.FDefaultLegend = None
+
+    # =============================================== def übergreifende Widgets  ===============================================
         # Layouteinstellungen der Widgets
         self.F_wdg_Layout       = Layout(display='flex', flex_flow='row', justify_content='center')
-        self.F_wdg_Box_Layout   = Layout(display='flex', flex_flow='column', align_items='stretch', width='100%')        
+        self.F_wdg_Box_Layout   = Layout(display='flex', flex_flow='column', align_items='stretch', width='100%')
 
         # Allgemeine Diagrammeinstellungen
-        self.Ftxt_Diagrammtitle     = Text(layout=self.F_wdg_Layout, visible=True)             
+        self.Ftxt_Diagrammtitle     = Text(layout=self.F_wdg_Layout, visible=True)
         self.FFloat_Baselinewidth   = FloatText(layout=self.F_wdg_Layout, value=2, disabled=False)
         self.FFloat_Markersize      = FloatText(layout=self.F_wdg_Layout, value=0.1, disabled=False)
         self.FCol_Marker            = ColorPicker(concise=False, value='blue')
@@ -102,7 +102,7 @@ class Class_Plot_Menu (object):
         self.Fbol_Show_Legende      = Checkbox(value=False,disabled=False)
         self.Fbol_Polar             = Checkbox(value=False,disabled=False)
         self.FFloat_FigSize_X       = BoundedFloatText(layout=self.F_wdg_Layout, value=10, disabled=False, min=1, max=20.0)
-        self.FFloat_FigSize_Y       = BoundedFloatText(layout=self.F_wdg_Layout, value=5, disabled=False, min=1, max=20.0)       
+        self.FFloat_FigSize_Y       = BoundedFloatText(layout=self.F_wdg_Layout, value=5, disabled=False, min=1, max=20.0)
         self.FFloat_Abtastfrequenz  = FloatText(layout=self.F_wdg_Layout, value=10, disabled=False)
 
         # X Achseneinstellungen
@@ -129,10 +129,10 @@ class Class_Plot_Menu (object):
         self.FAcc      = None
 
     # =============================================== nach init auszuführende def  ===============================================
-        # Zusammen setzen der Widgets        
-        self.show() 
-# ----------------------------------------------- ENDE DEF ----------------------------------------------- 
-    # Sperrt die Einstellungen die nicht im Ploarplot möglich sind
+        # Zusammensetzen der Widgets
+        self.show()
+# ----------------------------------------------- ENDE DEF -----------------------------------------------
+    # Sperrt die Einstellungen die nicht im Polarplot möglich sind
     def bol_Event_Polar_Changed(self, ADummy):
         self.FPolar                     = self.Fbol_Polar.value
         self.FFloat_x_Min.disabled      = self.Fbol_Polar.value
@@ -141,7 +141,7 @@ class Class_Plot_Menu (object):
         self.FFloat_y_Max.disabled      = self.Fbol_Polar.value
         self.Fbol_Show_Legende.disabled = self.Fbol_Polar.value
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
-    # Kopieren der Diagrammeinstellungen die bei jeden Plot gemacht werden müssen
+    # Kopieren der Diagrammeinstellungen die bei jedem Plot gemacht werden müssen
     def Copy_Input(self):
         plt.title(self.Ftxt_Diagrammtitle.value)
         plt.xlabel(self.Ftxt_x_Achse_Titel.value)
@@ -154,21 +154,21 @@ class Class_Plot_Menu (object):
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Erzeugen des Diagrammes je nach Siganal-Typ
     def btn_Event_show_plot(self, ADummy):
-        # Einstellen der Ausgabegröße     
+        # Einstellen der Ausgabegröße
         plt.figure(figsize=(self.FFloat_FigSize_X.value,self.FFloat_FigSize_Y.value))
 
         # IF die unterscheidet welcher Signaltyp vorhanden ist
         if self.FSignal.FTyp == self.FSignal.RS_Typ_discrete:
-            
+
             # Plotten des diskreten Signals
             xValues = np.arange(self.FFloat_x_Min.value,
                                 self.FFloat_x_Max.value,
                                 1 / self.FFloat_Abtastfrequenz.value)
-            
+
             yValues = self.FSignal.getList(xValues)
-            
-            # Wenn aus Datei eingelesn diese Werte nehmen 
-            if yValues[0] == False:  
+
+            # Wenn aus Datei eingelesen diese Werte nehmen
+            if yValues[0] == False:
                 xValues = yValues[1][0]
                 yValues = yValues[2][0]
 
@@ -183,17 +183,17 @@ class Class_Plot_Menu (object):
                      color=self.FCol_Baseline.value)
 
             self.Copy_Input()  # Kopieren der Diagrammeinstellungen die bei jeden Plot gemacht werden müssen
-            
+
             plt.show()
 
         elif self.FSignal.FTyp == self.FSignal.RS_Typ_continuous:
-            
-            # Plotten des kontinuierlichen Signals             
+
+            # Plotten des kontinuierlichen Signals
             xValues = np.arange(self.FFloat_x_Min.value,
                                 self.FFloat_x_Max.value,
                                 1 / self.FFloat_Abtastfrequenz.value)
             yValues = self.FSignal.getList(xValues)
-            
+
             # Plotten mit der Matplotlib und diverse Einstellungen übernehmen
             plt.title(self.Ftxt_Diagrammtitle.value)
             plt.xlabel(self.Ftxt_x_Achse_Titel.value)
@@ -201,14 +201,14 @@ class Class_Plot_Menu (object):
             plt.grid(self.Fbol_Show_Grid.value)
             plt.plot(xValues, yValues, linewidth=self.FFloat_Linewidth.value,
                      color=self.FCol_Line.value,)
-            
+
             plt.show()
 
         elif self.FSignal.FTyp == self.FSignal.RS_Typ_complex:
-            # Plotten des komplexen Signals   
-            # Wenn NICHT Polarplot gewählt dan Zeigerdiagramm erstellen, sonst Polarplot
+            # Plotten des komplexen Signals
+            # Wenn NICHT Polarplot gewählt dann Zeigerdiagramm erstellen, sonst Polarplot
             if not self.FPolar:
-                # Wenn eine Liste von Zeigern übergeben wurde dan diese Plotten, sonst einfacher Zeiger
+                # Wenn eine Liste von Zeigern übergeben wurde dann diese Plotten, sonst einfacher Zeiger
                 if isinstance(self.FToPlot, (list)):
                     # Init der Listen zum Plotten
                     ReStart = []
@@ -218,7 +218,7 @@ class Class_Plot_Menu (object):
                     ar      = []
                     leg     = []
 
-                    # Übergebende Liste auswerten un in neuen Listen zusammen setzen
+                    # Übergebende Liste auswerten und in neuen Listen zusammen setzen
                     for i in range(0, len(self.FToPlot)):
                         ReStart = ReStart + [self.FToPlot[i][0].real]
                         ReEnd   = ReEnd + [self.FToPlot[i][1].real]
@@ -230,8 +230,8 @@ class Class_Plot_Menu (object):
                         if self.Fbol_Show_Line[i].value:
                             # Plotts merken für Legende
                             ar = ar + [plt.arrow(ReStart[i],  # x1
-                                                 ImStart[i],  # y1                                                 
-                                                 ReEnd[i] - ReStart[i],# x2 - x1                                                
+                                                 ImStart[i],  # y1
+                                                 ReEnd[i] - ReStart[i],# x2 - x1
                                                  ImEnd[i] - ImStart[i], # y2 - y1
                                                  linewidth=self.FFloat_Linewidth[i].value,
                                                  color=self.FCol_Line[i].value,
@@ -244,8 +244,8 @@ class Class_Plot_Menu (object):
                     # Wenn Legende anzeigen, dann diese erstellen
                     if self.Fbol_Show_Legende.value:
                         plt.legend(ar, leg)
-                
-                # Wenn keine Liste übergeben nur ein Pfeil anzeigen
+
+                # Wenn keine Liste übergeben nur einen Pfeil anzeigen
                 else:
 
                     ReEnd = self.FToPlot.getZ(True).real
@@ -258,9 +258,9 @@ class Class_Plot_Menu (object):
                               head_length=self.FFloat_Markersize.value,
                               length_includes_head=True
                               )
-            # Wenn Polarplot gewählt dann siesen anzeigen
+            # Wenn Polarplot gewählt dann diesen anzeigen
             else:
-                # Wenn eine Liste von Zeigern übergeben wurde dan diese Plotten, sonst einfacher Zeiger
+                # Wenn eine Liste von Zeigern übergeben wurde dann diese Plotten, sonst einfacher Zeiger
                 if isinstance(self.FToPlot, (list)):
                     # Init der Listen zum Plotten
                     thetaStart  = []
@@ -270,13 +270,13 @@ class Class_Plot_Menu (object):
                     ar          = []
                     leg         = []
 
-                    # Übergebende Liste auswerten un in neuen Listen zusammen setzen
+                    # Übergebende Liste auswerten und in neuen Listen zusammen setzen
                     for i in range(0, len(self.FToPlot)):
                         thetaStart  = thetaStart + [np.angle(self.FToPlot[i][0], False)]
                         thetaEnd    = thetaEnd + [np.angle(self.FToPlot[i][1], False)]
                         rStart      = rStart + [np.absolute(self.FToPlot[i][0])]
                         rEnd        = rEnd + [np.absolute(self.FToPlot[i][1])]
-                    
+
                     # Plott für jeden Pfeil in der Liste ausführen
                     for i in range(0, len(thetaStart)):
                         if self.Fbol_Show_Line[i].value:
@@ -288,7 +288,7 @@ class Class_Plot_Menu (object):
                                                  markersize=self.FFloat_Markersize.value,
                                                  markerfacecoloralt=self.FCol_Marker.value
                                                  )]
-                # Wenn keine Liste übergeben nur ein Pfeil anzeigen
+                # Wenn keine Liste übergeben nur einen Pfeil anzeigen
                 else:
                     thetaEnd = self.FToPlot.getAngle(False)
                     rEnd     = self.FToPlot.getAbs()
@@ -302,12 +302,12 @@ class Class_Plot_Menu (object):
                 # Hinweise zum Polarplot anzeigen
                 print(self.RS_Hinweis_Polar)
 
-            self.Copy_Input() # Kopieren der Diagrammeinstellungen die bei jeden Plot gemacht werden müssen
+            self.Copy_Input() # Kopieren der Diagrammeinstellungen die bei jedem Plot gemacht werden müssen
             plt.show()
 
         return None  # Default Ausgabe wenn kein If erfüllt wird
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
-    
+
     # Alte Diagramme wieder löschen
     def btn_Event_clear(self, ADummy):
         clear_output()
@@ -319,7 +319,7 @@ class Class_Plot_Menu (object):
         self.Fbtn_plot.on_click(self.btn_Event_show_plot)
         self.Fbtn_clear.on_click(self.btn_Event_clear)
         self.Fbol_Polar.observe(self.bol_Event_Polar_Changed)
-        
+
         # Wenn eine Liste übergeben wurde entsprechende Widgets einbinden  (Linieneinstellungen usw.)
         if isinstance(self.FToPlot, (list)):
             # Init der Listen
@@ -329,9 +329,9 @@ class Class_Plot_Menu (object):
             self.FTabLineSetUpItems = []
             self.Fbol_Show_Line     = []
             self.FTabLineSetUp      = Tab(children=self.FTabLineSetUpItems)
-            # Zufälligefarbe erzeugen, damit nicht alle Linien die gleiche Farbe haben
+            # Zufällige Farbe erzeugen, damit nicht alle Linien die gleiche Farbe haben
             r = lambda: random.randint(0, 255)
-            # Für jede Linie eigende Einstellungen erstellen
+            # Für jede Linie eigene Einstellungen erstellen
             for i in range(0, len(self.FToPlot)):
 
                 # Beschriftungen
@@ -341,7 +341,7 @@ class Class_Plot_Menu (object):
 
                 subHBox_1 = HBox(children=subHBox_1_items)
 
-                # Widgets zur Linien Einstellung in Liste speichen, um diese Später einfacher zuverwenden 
+                # Widgets zur Linien-Einstellung in Liste speichern, um diese Später einfacher zu verwenden
                 self.FCol_Line        = self.FCol_Line + [ ColorPicker(concise=False, value='#%02X%02X%02X' % (r(), r(), r()))]
                 self.FFloat_Linewidth = self.FFloat_Linewidth + [FloatText(layout=self.F_wdg_Layout, value=1, disabled=False)]
                 self.Fbol_Show_Line   = self.Fbol_Show_Line + [Checkbox(value=True,    disabled=False)]
@@ -368,7 +368,7 @@ class Class_Plot_Menu (object):
                 # Aktuelles Tabfenster zur Anzeigeliste hinzufügen
                 self.FTabLineSetUpItems = self.FTabLineSetUpItems + [subTab]
                 self.FTabLineSetUp.set_title(i, self.RS_Linie + str(i + 1))
-            
+
             # Wenn alle Tabs für jede Linie erzeugt wurden diese als Tab anzeigen
             self.FTabLineSetUp.children = self.FTabLineSetUpItems
         # Wenn nur eine Linie übergeben dann nur diese Anzeigen, ohne Legende usw.
@@ -461,7 +461,7 @@ class Class_Plot_Menu (object):
 #
 #                                          ]
         elif self.FSignal.FTyp == self.FSignal.RS_Typ_continuous:
-        # Wenn kontinuierliches Siganl dieses entsprechende Einstellungen anzeigen
+        # Wenn kontinuierliches Siganl dieses entsprechend Einstellungen anzeigen
 
             self.FBoxAllgemeinItems = [Text(layout=self.F_wdg_Layout, value=self.RS_Diagrammtitel, disabled=True, visible=True),
                                        self.Ftxt_Diagrammtitle,
