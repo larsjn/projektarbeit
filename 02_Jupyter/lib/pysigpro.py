@@ -8,7 +8,7 @@ import lib.Plot_Widget as sigplt
 import parser
 from math import *
 import lib.Input_Parser as inp
-
+import csv
 
 # Signal-Basisklasse - muss von allen Signal-Klassen implementiert werden
 class signal(metaclass=ABCMeta):
@@ -794,3 +794,32 @@ class convolve(discrete):
         del outList[len(AVals):] 
         return outList
 
+class List(discrete):
+    def __init__(self):
+        super().__init__("discrete")
+        self.FFilePath = 'Sinus.csv'
+        self.xList = None
+        self.yList = None
+        self.read()
+       
+    def read(self):        
+        ffile  = open(self.FFilePath)
+        read = csv.reader(ffile)
+        self.xList = []
+        self.yList = []
+        for row in read :
+            self.xList = self.xList + [float(row[0])]
+            self.yList = self.yList + [float(row[1])]
+    
+    def getYAt(self, time):
+
+        try:            
+            i =  self.xList.index(time)
+            out = self.yList[i]
+        except ValueError:
+            out = None
+        return out  
+
+    def getList(self, inList):
+        outList = [False,[self.xList],[self.yList]]
+        return outList
