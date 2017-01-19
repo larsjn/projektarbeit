@@ -1,9 +1,6 @@
-
 # coding: utf-8
 
 from IPython.display import display
-from IPython.display import clear_output
-
 from ipywidgets import Accordion
 from ipywidgets import Layout
 from ipywidgets import Text
