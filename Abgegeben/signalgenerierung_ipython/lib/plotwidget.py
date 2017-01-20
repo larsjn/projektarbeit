@@ -23,7 +23,7 @@ from ipywidgets import BoundedFloatText
 #   - def übergreifende Variablen wurden zunächst alle in der Init vor definiert
 #            o  def übergreifende Variablen wurden mit einem F vor dem Namen gekennzeichnet
 #   - Texte die angezeigt werden wurden in der Init definiert und mit RS_ gekennzeichnet
-#            o  wenn Widget im Init definiert wurde ggf. der String direckt im Widget definiert
+#            o  wenn Widget im Init definiert wurde ggf. der String direkt im Widget definiert
 
 class Class_Plot_Menu (object):
 
@@ -95,7 +95,7 @@ class Class_Plot_Menu (object):
         # Allgemeine Diagrammeinstellungen
         self.Ftxt_Diagrammtitle     = Text(layout=self.F_wdg_Layout, visible=True)
         self.FFloat_Baselinewidth   = FloatText(layout=self.F_wdg_Layout, value=2, disabled=False)
-        self.FFloat_Markersize      = FloatText(layout=self.F_wdg_Layout, value=0.1, disabled=False)
+        self.FFloat_Markersize      = FloatText(layout=self.F_wdg_Layout, value=0.5, disabled=False)
         self.FCol_Marker            = ColorPicker(concise=False, value='blue')
         self.FCol_Baseline          = ColorPicker(concise=False, value='blue')
         self.Fbol_Show_Grid         = Checkbox(value=False,disabled=False)
@@ -103,7 +103,7 @@ class Class_Plot_Menu (object):
         self.Fbol_Polar             = Checkbox(value=False,disabled=False)
         self.FFloat_FigSize_X       = BoundedFloatText(layout=self.F_wdg_Layout, value=10, disabled=False, min=1, max=20.0)
         self.FFloat_FigSize_Y       = BoundedFloatText(layout=self.F_wdg_Layout, value=5, disabled=False, min=1, max=20.0)
-        self.FFloat_Abtastfrequenz  = FloatText(layout=self.F_wdg_Layout, value=10, disabled=False)
+        self.FFloat_Abtastfrequenz  = FloatText(layout=self.F_wdg_Layout, value=50, disabled=False)
 
         # X Achseneinstellungen
         self.Ftxt_x_Achse_Titel = Text(layout=self.F_wdg_Layout, visible=True)
@@ -167,10 +167,10 @@ class Class_Plot_Menu (object):
 
             yValues = self.FSignal.getList(xValues)
 
-            # Wenn aus Datei eingelesen diese Werte nehmen
-            if yValues[0] == False:
-                xValues = yValues[1][0]
-                yValues = yValues[2][0]
+            # Wenn aus Datei eingelesen diese Werte nehmen; Bis jetzt nur Ansatz daher erst mal auskommentiert
+            #if yValues[0] == False:
+            #    xValues = yValues[1][0]
+            #    yValues = yValues[2][0]
 
             # Plotten mit der Matplotlib und diverse Einstellungen übernehmen
             markerline, stemlines, baseline = plt.stem(xValues, yValues, '-.')

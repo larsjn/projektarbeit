@@ -16,7 +16,7 @@ from threading import Timer
 #   - def übergreifende Variablen wurden zunächst alle in der Init vordefiniert
 #            o  def übergreifende Variablen wurden mit einem F vor dem Namen gekennzeichnet
 #   - Texte die angezeigt werden wurden in der Init definiert und mit RS_ gekennzeichnet
-#            o  wenn Widget im Init definiert wurde ggf. der String direckt im Widget definiert
+#            o  wenn Widget im Init definiert wurde ggf. der String direkt im Widget definiert
 
 class create_complex(object):
     def __init__(self):
@@ -48,8 +48,8 @@ class create_complex(object):
         self.F_wdg_Box_Layout = Layout(display='flex',flex_flow='column',align_items='stretch',width='100%')
 
         # Widgets zur Eingabe der komplexen Zahl
-        self.FFloat_Im      = FloatText(layout=self.F_wdg_Layout,value=0.4, disabled=False)
-        self.FFloat_Re      = FloatText(layout=self.F_wdg_Layout,value=0, disabled=False)
+        self.FFloat_Im      = FloatText(layout=self.F_wdg_Layout,value=5, disabled=False)
+        self.FFloat_Re      = FloatText(layout=self.F_wdg_Layout,value=4, disabled=False)
         self.FFloat_Phase   = FloatText(layout=self.F_wdg_Layout,value=0, disabled=False)
         self.FFloat_Betrag  = FloatText(layout=self.F_wdg_Layout,value=0, disabled=False)
 

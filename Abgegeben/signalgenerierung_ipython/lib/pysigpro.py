@@ -12,7 +12,7 @@ from math import *
 #   - def übergreifende Variablen wurden zunächst alle in der Init vor definiert
 #            o  def übergreifende Variablen wurden mit einem F vor dem Namen gekennzeichnet
 #   - Texte die angezeigt werden wurden in der Init definiert und mit RS_ gekennzeichnet
-#            o  wenn Widget im Init definiert wurde ggf. der String direckt im Widget definiert
+#            o  wenn Widget im Init definiert wurde ggf. der String direkt im Widget definiert
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                                 BASIS-KLASSEN
@@ -439,30 +439,30 @@ class add(signal):
         self.RS_Signal_AB = 'Signal A+B'
         self.RS_ERROR_1 = 'ERROR: Signaltypen unterscheiden sich'
     # =============================================== def übergreifende Variablen ===============================================
-        self.FsigA = ASignalA
-        self.FsigB = ASignalB
+        self.FSigA = ASignalA
+        self.FSigB = ASignalB
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Setzt das Signal A neu
     def setSigA(self, ASignalA):
-        self.FsigA = ASignalA
+        self.FSigA = ASignalA
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Setzt das Signal B neu
     def setSigB(self, ASignalB):
-        self.FsigB = ASignalB
+        self.FSigB = ASignalB
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Gibt den y-Wert für einen gegebenen x-Wert zurück
     def getYAt(self, ATime):
         # ggf Signale neu laden, falls im Signal implementiert
-        self.FsigA.update()
-        self.FsigB.update()
+        self.FSigA.update()
+        self.FSigB.update()
         # Je nach Signaltyp Funktion durchführen
-        if self.FsigA.FTyp == self.FsigB.FTyp:
+        if self.FSigA.FTyp == self.FSigB.FTyp:
             if self.FTyp ==  self.RS_Typ_discrete:
-                if (self.FsigA.getYAt(ATime)  != None) and (self.FsigB.getYAt(ATime) != None) :
-                        return np.add(self.FsigA.getYAt(ATime),self.FsigB.getYAt(ATime))
+                if (self.FSigA.getYAt(ATime)  != None) and (self.FSigB.getYAt(ATime) != None) :
+                        return np.add(self.FSigA.getYAt(ATime),self.FSigB.getYAt(ATime))
                 return None
             elif self.FTyp == self.RS_Typ_continuous:
-                return  self.FsigA.getYAt(ATime) + self.FsigB.getYAt(ATime)
+                return  self.FSigA.getYAt(ATime) + self.FSigB.getYAt(ATime)
             elif self.FTyp == self.RS_Typ_complex:
                 return  None
             else:
@@ -480,9 +480,9 @@ class add(signal):
             return  None
         elif self.FTyp == self.RS_Typ_complex:
                 if not AAsNumpy:
-                    return self.FsigA.getZ() + self.FsigB.getZ()
+                    return self.FSigA.getZ() + self.FSigB.getZ()
                 else:
-                    return np.array(self.FsigA.getZ() + self.FsigB.getZ())
+                    return np.array(self.FSigA.getZ() + self.FSigB.getZ())
         else:
             return  None
         return None # Default Ausgabe wenn kein If erfüllt wird
@@ -495,7 +495,7 @@ class add(signal):
         elif self.FTyp == self.RS_Typ_continuous:
             return  None
         elif self.FTyp == self.RS_Typ_complex:
-             return self.FsigA.getRe() + self.FsigB.getRe()
+             return self.FSigA.getRe() + self.FSigB.getRe()
 
         else:
             return  None
@@ -509,7 +509,7 @@ class add(signal):
         elif self.FTyp == self.RS_Typ_continuous:
             return  None
         elif self.FTyp == self.RS_Typ_complex:
-              return self.FsigA.getIm() + self.FsigB.getIm()
+              return self.FSigA.getIm() + self.FSigB.getIm()
         else:
             return  None
         return None # Default Ausgabe wenn kein If erfüllt wird
@@ -551,7 +551,7 @@ class add(signal):
             return  None
         elif self.FTyp == self.RS_Typ_complex:
             # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]
-            ToPlot = [[0,self.FsigA.getZ()],[self.FsigA.getZ(),self.getZ()],[0,self.getZ()]]
+            ToPlot = [[0,self.FSigA.getZ()],[self.FSigA.getZ(),self.getZ()],[0,self.getZ()]]
             sigplt.Class_Plot_Menu(self,ToPlot,[self.RS_Signal_A,self.RS_Signal_B, self.RS_Signal_AB])
             return  None
         else:
@@ -560,12 +560,12 @@ class add(signal):
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # ggf. Sigale Updaten, fall implementiert
     def update(self):
-        self.FsigA.update()
-        self.FsigB.update()
+        self.FSigA.update()
+        self.FSigB.update()
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Ausgabe der Eingabe beim Printbefehl
     def __str__(self):
-        return self.FsigA.__str__() + "+" + self.FsigB.__str__()
+        return self.FSigA.__str__() + "+" + self.FSigB.__str__()
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
 # +++++++++++++++++++++++++++++++++++++++++++++++ ENDE CLASS +++++++++++++++++++++++++++++++++++++++++++++
 
@@ -593,7 +593,11 @@ class sub(signal):
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Gibt den y-Wert für einen gegebenen x-Wert zurück
     def getYAt(self, ATime):
-        return self.FSigA.getYAt(ATime) - self.FSigB.getYAt(ATime)
+        # Je nach Signaltyp Funktion durchführen
+        if self.FTyp ==  self.RS_Typ_discrete or  self.FTyp == self.RS_Typ_continuous:
+            return self.FSigA.getYAt(ATime) - self.FSigB.getYAt(ATime)
+        else:
+            return None
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Konvertiert Komplexes-Eingabeformat zu Komplexem-Numpy-Format (True) oder behält Komplexes-Eingabeformat bei
     def getZ(self,AAsNumpy=False):
@@ -701,20 +705,24 @@ class mul(signal):
         self.RS_Signal_B = 'Signal B'
         self.RS_Signal_AB = 'Signal A*B'
     # =============================================== def übergreifende Variablen ===============================================
-        self.FsigA = ASignalA
-        self.FsigB = ASignalB
+        self.FSigA = ASignalA
+        self.FSigB = ASignalB
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Setzt das Signal A neu
     def setSigA(self, ASignalA):
-        self.FsigA = ASignalA
+        self.FSigA = ASignalA
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Setzt das Signal B neu
     def setSigB(self, ASignalB):
-        self.FsigB = ASignalB
+        self.FSigB = ASignalB
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Gibt den y-Wert für einen gegebenen x-Wert zurück
     def getYAt(self, ATime):
-        return self.FsigA.getYAt(ATime) * self.FsigB.getYAt(ATime)
+        # Je nach Signaltyp Funktion durchführen
+        if self.FTyp ==  self.RS_Typ_discrete or  self.FTyp == self.RS_Typ_continuous:
+            return self.FSigA.getYAt(ATime) * self.FSigB.getYAt(ATime)
+        else:
+            return None
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Konvertiert Komplexes-Eingabeformat zu Komplexem-Numpy-Format (True) oder behält Komplexes-Eingabeformat bei
     def getZ(self,AAsNumpy=False):
@@ -726,9 +734,9 @@ class mul(signal):
             return  None
         elif self.FTyp == self.RS_Typ_complex:
                 if not AAsNumpy:
-                    return self.FsigA.getZ() * self.FsigB.getZ()
+                    return self.FSigA.getZ() * self.FSigB.getZ()
                 else:
-                    return np.array(self.FsigA.getZ() * self.FsigB.getZ())
+                    return np.array(self.FSigA.getZ() * self.FSigB.getZ())
         else:
             return  None
         return None # Default Ausgabe wenn kein If erfüllt wird
@@ -797,7 +805,7 @@ class mul(signal):
             return  None
         elif self.FTyp == self.RS_Typ_complex:
             # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]
-            ToPlot = [[0,self.FsigA.getZ()],[0,self.FsigB.getZ()],[0,self.getZ()]]
+            ToPlot = [[0,self.FSigA.getZ()],[0,self.FSigB.getZ()],[0,self.getZ()]]
             sigplt.Class_Plot_Menu(self,ToPlot,[self.RS_Signal_A,self.RS_Signal_B, self.RS_Signal_AB])
             return  None
         else:
@@ -821,20 +829,24 @@ class div(signal):
         self.RS_Signal_B = 'Signal B'
         self.RS_Signal_AB = 'Signal A/B'
     # =============================================== def übergreifende Variablen ===============================================
-        self.FsigA = ASignalA
-        self.FsigB = ASignalB
+        self.FSigA = ASignalA
+        self.FSigB = ASignalB
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Setzt das Signal A neu
     def setSigA(self, ASignalA):
-        self.FsigA = ASignalA
+        self.FSigA = ASignalA
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Setzt das Signal B neu
     def setSigB(self, ASignalB):
-        self.FsigB = ASignalB
+        self.FSigB = ASignalB
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Gibt den y-Wert für einen gegebenen x-Wert zurück
     def getYAt(self, ATime):
-        return self.FsigA.getYAt(ATime) / self.FsigB.getYAt(ATime)
+        # Je nach Signaltyp Funktion durchführen
+        if self.FTyp ==  self.RS_Typ_discrete or  self.FTyp == self.RS_Typ_continuous:
+            return self.FSigA.getYAt(ATime) / self.FSigB.getYAt(ATime)
+        else:
+            return None
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Konvertiert Komplexes-Eingabeformat zu Komplexem-Numpy-Format (True) oder behält Komplexes-Eingabeformat bei
     def getZ(self,AAsNumpy=False):
@@ -846,9 +858,9 @@ class div(signal):
             return  None
         elif self.FTyp == self.RS_Typ_complex:
                 if not AAsNumpy:
-                    return self.FsigA.getZ() / self.FsigB.getZ()
+                    return self.FSigA.getZ() / self.FSigB.getZ()
                 else:
-                    return np.array(self.FsigA.getZ() / self.FsigB.getZ())
+                    return np.array(self.FSigA.getZ() / self.FSigB.getZ())
         else:
             return  None
         return None # Default Ausgabe wenn kein If erfüllt wird
@@ -917,7 +929,7 @@ class div(signal):
             return  None
         elif self.FTyp == self.RS_Typ_complex:
             # Layout der Liste [[ZInAStart,ZInAEnd],[ZInBStart,ZInBStart],[ZOutStart,ZOutEnd]]
-            ToPlot = [[0,self.FsigA.getZ()],[0,self.FsigB.getZ()],[0,self.getZ()]]
+            ToPlot = [[0,self.FSigA.getZ()],[0,self.FSigB.getZ()],[0,self.getZ()]]
             sigplt.Class_Plot_Menu(self,ToPlot,[self.RS_Signal_A,self.RS_Signal_B, self.RS_Signal_AB])
             return  None
         else:
@@ -951,7 +963,11 @@ class shift(signal):
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     # Gibt den y-Wert für einen gegebenen x-Wert zurück
     def getYAt(self, time):
-        return self.FSignal.getYAt(time + self.FOffset)
+        # Je nach Signaltyp Funktion durchführen
+        if self.FTyp ==  self.RS_Typ_discrete or  self.FTyp == self.RS_Typ_continuous:
+            return self.FSignal.getYAt(time + self.FOffset)
+        else:
+            return None
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
 # +++++++++++++++++++++++++++++++++++++++++++++++ ENDE CLASS +++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1032,7 +1048,6 @@ class List(discrete):
             self.FyList = self.FyList + [float(row[1])]
 # ----------------------------------------------- ENDE DEF -----------------------------------------------
     def getYAt(self, Time):
-
         try:
             i =  self.FxList.index(Time)
             out = self.FyList[i]

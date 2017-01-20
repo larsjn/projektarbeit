@@ -11,7 +11,7 @@ from ipywidgets import Box
 #   - def übergreifende Variablen wurden zunächst alle in der Init vor definiert
 #            o  def übergreifende Variablen wurden mit einem F vor dem Namen gekennzeichnet
 #   - Texte die angezeigt werden wurden in der Init definiert und mit RS_ gekennzeichnet
-#            o  wenn Widget im Init definiert wurde ggf. der String direckt im Widget definiert
+#            o  wenn Widget im Init definiert wurde ggf. der String direkt im Widget definiert
 
 
 #Erzeugt die Eingabemaske für die Eingabe einer kontinuierlichen (bzw. diskretisierbaren) Funktion
